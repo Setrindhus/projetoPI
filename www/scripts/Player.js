@@ -16,3 +16,7 @@ function Player (name, bday, country){
     this.player_bday = bday;
     this.player_country = country;
 }
+
+Player.prototype.toString = function() {
+    return this.player_name;
+}
