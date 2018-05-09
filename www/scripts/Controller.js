@@ -206,7 +206,7 @@ var player_country = document.getElementById("player_country").value;
         alert("Insert valid values!");
         return;
     }else{
-            arrayPlayers.push(new Player(player_name, player_bday, player_country));
+            arrayPlayers.push(new Player(player_name, new Date(player_bday), player_country));
             openPlayers();
             return;
         }
@@ -227,7 +227,7 @@ var game_player = document.getElementById("game_player").value;
                 alert("Insert valid values!");
                 return;
             }else{
-            arrayGames.push(new GameSession(game_sDate, game_desc, game_player));
+            arrayGames.push(new GameSession(new Date(game_sDate), game_desc, game_player));
             openGameSessions();
             return;
         }
@@ -263,6 +263,7 @@ function createTable(array) {
         for (let property in player) {
             var td = document.createElement("td");
 
+            console.log(property + ": " + player[property]);
             if(property.includes("_bday")){ //Se for a data de nascimento
                 td.textContent = calculateAge(player[property]); //adiciona a idade a celula
             } else if(property.includes("_sDate")){
