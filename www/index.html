@@ -55,7 +55,7 @@
             </div>
             <div id="addPlayerButtons">
                 <button onclick="javascript: addPlayer()">Add Player</button>
-                <button onclick="javascript: cancel('players')"> Cancel </button>
+                <button onclick="javascript: cancel(openPlayers())"> Cancel </button>
             </div>
         </div>
 
@@ -71,15 +71,8 @@
         <div class="index">
                 <h1>GAMES</h1>
         </div>
-        <div class="sessionsButtons">
-            <button onClick="javascript: openCreateSession()">ADD SESSION</button>
-            <button onClick="javascript: removerJogador()">REMOVE SESSION</button>
-            <button onClick="javascript: editarJogador()">EDIT SESSION</button>
-        </div>
-    </article>
-
     <!-- Screen to add and edit sessions -->
-    <div id="addGameSessions" style ="display: none">
+    <div id="addGameSessions">
         <div class="addGameSessionsForm">
             <form action="">
                     <label for="labelStartDate">Start Date:</label>
@@ -92,11 +85,18 @@
                     <input type="text" id="game_player" name="playerName" placeholder="Player Name">
             </form>
         </div>
-        <div id="addSessionButtonsHTML">
+        <div id="addSessionButtons">
                 <button onclick="javascript: addSession()">Add Session</button>
-                <button onclick="javascript: cancel('gameSessions')"> Cancel </button>
+                <button onclick="javascript: cancel(openGameSessions())"> Cancel </button>
             </div>
     </div>
+
+    <div id="sessionsButtons">
+        <button onClick="javascript: openCreateSession()">ADD SESSION</button>
+        <button onClick="javascript: removerJogador()">REMOVE SESSION</button>
+        <button onClick="javascript: editarJogador()">EDIT SESSION</button>
+    </div>
+</article>
     
     <article id="stats">
         <div class="index">

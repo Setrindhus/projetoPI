@@ -1,3 +1,4 @@
+
 var arrayPlayers = [
     new Player("João", new Date("2008-08-08"), "PT"),
     new Player("Joana", new Date("2009-09-09"), "PT"),
@@ -119,6 +120,8 @@ function openPlayers() {
 function openGameSessions() {
     closeTabs();
     document.getElementById("gameSessions").style.display = "block";
+    document.getElementById("sessionsButtons").style.display ="block";
+    document.getElementById("addGameSessions").style.display = "none";
     createTable(arrayGames);
 
     active_tab = "gameSessions"
@@ -140,8 +143,31 @@ function openCreatePlayer() {
     document.getElementById("addPlayers").style.display = "block";
 }
 
+function openCreateSession(){
+    openGameSessions();
+    document.getElementById("gamesTable").style.display = "none";
+    document.getElementById("sessionsButtons").style.display = "none";
+    document.getElementById("addGameSessions").style.display = "block";
+}
+
 function openEdit() {
 
+}
+
+function cancel(open){
+    
+
+    //Player Form
+    document.getElementById("player_name").value = "";
+    document.getElementById("player_bday").value = "";
+    document.getElementById("player_country").value = "Germany";
+
+    //Game Sessions Form
+    document.getElementById("game_sDate").value = "";
+    document.getElementById("game_desc").value = "";
+    document.getElementById("game_player").value = "";
+
+    open();
 }
 
 /* Controladores */
@@ -171,24 +197,15 @@ var player_name = document.getElementById("player_name").value;
 var player_bday = document.getElementById("player_bday").value;
 var player_country = document.getElementById("player_country").value;
 
-    var exist = false;
-    for(var i= 0; i < arrayPlayers.length; i++){
-        if(player_name === arrayPlayers[i].player_name){
-            exists = true;
-            alert("This player already exists!");
-            return;
-        }else if(
-            player_name == ""
-            || player_bday.split("/")[0] == "dd"
-            || player_bday.split("/")[1] == "mm"
-            || player_bday.split("/")[2] == "yyyy"
-            || player_country == "") {
-                exist = true;
-                alert("Insert valid values!");
-                return;
-            }
-        }
-        if(!exist){
+    
+    if(player_name == "" 
+        || player_bday.split("/")[0] == "dd"
+        || player_bday.split("/")[1] == "mm"
+        || player_bday.split("/")[2] == "yyyy"
+        || player_country == "") {
+        alert("Insert valid values!");
+        return;
+    }else{
             arrayPlayers.push(new Player(player_name, player_bday, player_country));
             openPlayers();
             return;
@@ -197,6 +214,24 @@ var player_country = document.getElementById("player_country").value;
 
 // ************************GAME SESSIONS************************
 
+function addSession(){
+var game_sDate = document.getElementById("game_sDate").value;
+var game_desc = document.getElementById("game_desc").value;
+var game_player = document.getElementById("game_player").value;
+
+    if(game_sDate.split("/")[0] == "dd"
+        || game_sDate.split("/")[1] == "mm"
+        || game_sDate.split("/")[2] == "yyyy"
+        || game_desc == ""
+        || game_player == "") {
+                alert("Insert valid values!");
+                return;
+            }else{
+            arrayGames.push(new GameSession(game_sDate, game_desc, game_player));
+            openGameSessions();
+            return;
+        }
+}
 
 
 /* Criação de Tabelas */
