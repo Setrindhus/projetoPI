@@ -117,6 +117,7 @@ function openEdit() {
 var selectedPlayerID = void 0;
 
 function selectPlayer(id){
+    //Olá amigos :)
     selectedPlayerID = id;
 }
 
