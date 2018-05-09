@@ -6,3 +6,7 @@ function GameSession(sDate, desc, player){
     this.game_desc = desc;
     this.game_player = player;
 }
+
+GameSession.prototype.toString = function() {
+    return this.game_id;
+}
