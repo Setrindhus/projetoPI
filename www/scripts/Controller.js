@@ -1,14 +1,14 @@
 var arrayPlayers = [
-    new Player("João", "08/08/2008", "PT"),
-    new Player("Joana", "09/09/2009", "PT"),
-    new Player("Miguel", "10/10/2010", "PT"),
-    new Player("Manuela", "11/11/2011", "PT"),
-    new Player("Manuel", "12/12/2012", "PT")
+    new Player("João", new Date("2008-08-08"), "PT"),
+    new Player("Joana", new Date("2009-09-09"), "PT"),
+    new Player("Miguel", new Date("2010-10-10"), "PT"),
+    new Player("Manuela", new Date("2011-11-11"), "PT"),
+    new Player("Manuel", new Date("2012-12-12"), "PT")
 ];
 var arrayGames = [
-    new GameSession("07/05/2018","Level 1 - Origins","João"),
-    new GameSession("06/04/2018","Level 2 - Going On","João"),
-    new GameSession("05/03/2018","Level 1 - Origins","Joana")
+    new GameSession(new Date("2018-05-07"),"Level 1 - Origins","João"),
+    new GameSession(new Date("2018-04-06"),"Level 2 - Going On","João"),
+    new GameSession(new Date("2018-03-05"),"Level 1 - Origins","Joana")
 ];
 var arrayStats = [];
 var arrayStatsTypes = [];
@@ -77,6 +77,12 @@ function closeTabs() {
 function resetSelecteds(){
     selectedGameSessionID = void 0;
     selectedPlayerID = void 0;
+}
+
+function calculateAge(birthday) { // birthday is a date
+    var ageDifMs = Date.now() - birthday.getTime();
+    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 
 /**
@@ -221,7 +227,15 @@ function createTable(array) {
         let tr = document.createElement("tr");
         for (let property in player) {
             var td = document.createElement("td");
-            td.textContent = player[property]; //adiciona o valor a uma celula
+
+            if(property.includes("_bday")){ //Se for a data de nascimento
+                td.textContent = calculateAge(player[property]); //adiciona a idade a celula
+            } else if(property.includes("_sDate")){
+                td.textContent = player[property].toISOString().split("T")[0];
+            } else {
+                td.textContent = player[property]; //adiciona o valor a uma celula
+            }
+
             tr.appendChild(td); //adiciona a celula a fila
         }
         if(array[0] instanceof Player){
@@ -257,7 +271,7 @@ function tableHeader(array) {
             thr.appendChild(th);
         }
         else if (property.includes("_bday")) {
-            th.textContent = "Birthday";
+            th.textContent = "Age";
             thr.appendChild(th);
         }
         else if (property.includes("_country")) {
