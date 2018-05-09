@@ -22,7 +22,7 @@ nav {
 }
 
 nav a:hover{
-    background-color: dimgrey;
+    background-color: dimgrey !important;
 }
 
 nav a{
