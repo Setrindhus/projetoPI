@@ -13,37 +13,50 @@ var arrayGames = [
 var arrayStats = [];
 var arrayStatsTypes = [];
 
-/*
-    new Player("João","08/08/2008","PT"),
-    new Player("Joana","09/09/2009","PT"),
-    new Player("Miguel","10/10/2010","PT"),
-    new Player("Manuela","11/11/2011","PT"),
-    new Player("Manuel","12/12/2012","PT")
-*/
-
 var active_tab = "home";
 
 /* Visuais */
 
 /**
  * Escurece o fundo do separador ativo
- * @param {*} tab 
  */
-function highlightSelectedTab(tab) {
-    switch (tab) {
+function highlightSelectedTab() {
+    eraseTabsHighlights();
+    switch (active_tab) {
         case "home":
-            document.getElementsByTagName("nav").firstChild.style.backgroundColor = "dimgray";
-            console.log(document.getElementsByTagName("nav").childNodes[0]);
+            document.getElementsByTagName("nav")[0].firstElementChild.style.backgroundColor = "dimgray";
             break;
         case "players":
-            document.getElementsByTagName("nav").childNodes[1].style.backgroundColor = "dimgray";
+            document.getElementsByTagName("nav")[0].children[1].style.backgroundColor = "dimgray";
             break;
         case "gameSessions":
-            document.getElementsByTagName("nav").childNodes[2].style.backgroundColor = "dimgray";
+            document.getElementsByTagName("nav")[0].children[2].style.backgroundColor = "dimgray";
             break;
         case "stats":
-            document.getElementsByTagName("nav").childNodes[3].style.backgroundColor = "dimgray";
+            document.getElementsByTagName("nav")[0].children[3].style.backgroundColor = "dimgray";
             break;
+    }
+}
+
+function eraseTabsHighlights(){
+    for(let i = 0; i < document.getElementsByTagName("nav")[0].children.length;i++){
+        let li = document.getElementsByTagName("nav")[0].children[i];
+        li.style.backgroundColor = 'rgb(150, 150, 150)';
+    }
+}
+
+function highlightSelectedTableRow(tr){
+    tr.style.backgroundColor = "darkblue";
+}
+
+function eraseTablesHighlights(){
+    var tables = document.getElementsByTagName("table");
+    for(let i = 0;i < tables.length;i++){
+        let table = tables[i];
+        for (let j = 1;j<table.childNodes.length;j++){
+            let tr = table.childNodes[j];
+            tr.style.backgroundColor = "white";
+        }
     }
 }
 
@@ -57,6 +70,13 @@ function closeTabs() {
     document.getElementById("players").style.display = "none";
     document.getElementById("gameSessions").style.display = "none";
     document.getElementById("stats").style.display = "none";
+
+    resetSelecteds();
+}
+
+function resetSelecteds(){
+    selectedGameSessionID = void 0;
+    selectedPlayerID = void 0;
 }
 
 /**
@@ -74,7 +94,9 @@ function deleteElement(id){
 function openHome() {
     closeTabs();
     document.getElementById("home").style.display = "block";
-    //highlightSelectedTab("home");
+
+    active_tab = "home"
+    highlightSelectedTab();
 }
 
 function openPlayers() {
@@ -83,20 +105,26 @@ function openPlayers() {
     document.getElementById("playersButtons").style.display ="block";
     document.getElementById("addPlayers").style.display = "none";
     createTable(arrayPlayers);
-    //highlightSelectedTab("players");
+
+    active_tab = "players"
+    highlightSelectedTab();
 }
 
 function openGameSessions() {
     closeTabs();
     document.getElementById("gameSessions").style.display = "block";
     createTable(arrayGames);
-    //highlightSelectedTab("gameSessions");
+
+    active_tab = "gameSessions"
+    highlightSelectedTab();
 }
 
 function openStats() {
     closeTabs();
     document.getElementById("stats").style.display = "block";
-    //highlightSelectedTab("stats");
+
+    active_tab = "stats"
+    highlightSelectedTab();
 }
 
 function openCreatePlayer() {
@@ -115,40 +143,28 @@ function openEdit() {
 // ************************PLAYERS************************
 
 var selectedPlayerID = void 0;
+var selectedGameSessionID = void 0;
 
-function selectPlayer(id){
-    //Olá amigos :)
+function selectPlayer(id, tr){
     selectedPlayerID = id;
+    eraseTablesHighlights();
+    highlightSelectedTableRow(tr);
+}
+
+function selectGameSession(id, tr){
+    selectedGameSessionID = id;
+    eraseTablesHighlights();
+    highlightSelectedTableRow(tr);
 }
 
 /**
  * Creates a player and puts in the array
  */
 function addPlayer(){
-//var oldName = getCheckedName("playersTable");
-//var player_id = document.getElementById("player_id").value;
 var player_name = document.getElementById("player_name").value;
 var player_bday = document.getElementById("player_bday").value;
 var player_country = document.getElementById("player_country").value;
 
-/*if(selectedPlayer != void 0){
-    var exists = false;
-    arrayPlayers.forEach(function(player,index){
-        if(player_name === player.player_name){
-            exists = true;
-            alert("This player already exists!");
-            return;
-        }
-    }, this);
-    if(!exists){
-        selectedPlayer.player_name = player_name;
-        selectedPlayer.player_bday = player_bday;
-        selectedPlayer.player_country = player_country;
-        playersTable();
-        return;
-    }
-    
-}else {*/
     var exist = false;
     for(var i= 0; i < arrayPlayers.length; i++){
         if(player_name === arrayPlayers[i].player_name){
@@ -156,7 +172,7 @@ var player_country = document.getElementById("player_country").value;
             alert("This player already exists!");
             return;
         }else if(
-            player_name == "" 
+            player_name == ""
             || player_bday.split("/")[0] == "dd"
             || player_bday.split("/")[1] == "mm"
             || player_bday.split("/")[2] == "yyyy"
@@ -171,7 +187,6 @@ var player_country = document.getElementById("player_country").value;
             openPlayers();
             return;
         }
-    //}
 }
 
 // ************************GAME SESSIONS************************
@@ -203,13 +218,17 @@ function createTable(array) {
     //Cria a tabela
     for (let index in array) {
         var player = array[index];
-        var tr = document.createElement("tr");
+        let tr = document.createElement("tr");
         for (let property in player) {
             var td = document.createElement("td");
             td.textContent = player[property]; //adiciona o valor a uma celula
             tr.appendChild(td); //adiciona a celula a fila
         }
-        tr.onclick(selectPlayer(tr.firstElementChild.textContent));
+        if(array[0] instanceof Player){
+        tr.onclick = function() {selectPlayer(tr.firstElementChild.textContent, tr)};
+        } else if(array[0] instanceof GameSession){
+            tr.onclick = function() {selectGameSession(tr.firstElementChild.textContent, tr)};
+        }
         table.appendChild(tr); //adiciona a fila a tabela
     }
 
