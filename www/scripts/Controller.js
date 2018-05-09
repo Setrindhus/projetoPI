@@ -144,9 +144,50 @@ function openCreateSession(){
     document.getElementById("addGameSessions").style.display = "block";
 }
 
-function openEdit() {
-
+function openEditPlayer() {
+if(selectedPlayerID != void 0){
+    console.log("yaa");
+    for(let i=0; i<arrayPlayers.length;i++){
+        console.log("yolol");
+        console.log("a"+arrayPlayers[i].player_id);
+        console.log(selectedPlayerID);
+        if(selectedPlayerID == arrayPlayers[i].player_id){
+        console.log("yep");
+        console.log(arrayPlayers[i].player_bday);
+            document.getElementById("player_name").value = arrayPlayers[i].player_name;
+            document.getElementById("player_bday").value = arrayPlayers[i].player_bday;
+            switch(arrayPlayers[i].player_country){
+                case "PT":
+                document.getElementById("player_country").value = "Portugal";
+                case "ARG":
+                document.getElementById("player_country").value = "Argentina";
+                case "AUS":
+                document.getElementById("player_country").value = "Australia";
+                case "BR":
+                document.getElementById("player_country").value = "Brasil";
+                case "BUL":
+                document.getElementById("player_country").value = "Bulgaria";
+                case "CAN":
+                document.getElementById("player_country").value = "Canada";
+                case "CHI":
+                document.getElementById("player_country").value = "China";
+                case "DEN":
+                document.getElementById("player_country").value = "Denmark";
+                case "GER":
+                document.getElementById("player_country").value = "Germany";
+                case "SP":
+                document.getElementById("player_country").value = "Spain";
+            }
+            //document.getElementById("player_country").value = arrayPlayers[i].player_country;
+            break;
+        }
+        }
+        openCreatePlayer();
+    }else{
+        alert("Please select a Player!")
+    }
 }
+
 
 function cancel(open){
     
@@ -191,8 +232,24 @@ var player_name = document.getElementById("player_name").value;
 var player_bday = document.getElementById("player_bday").value;
 var player_country = document.getElementById("player_country").value;
 
-    
-    if(player_name == "" 
+if(selectedPlayerID != void 0){
+    for(let i= 0; i<arrayPlayers.length;i++){
+        if(selectedPlayerID === arrayPlayers[i].id){
+            if(player_name == "" 
+                || player_bday.split("/")[0] == "dd"
+                || player_bday.split("/")[1] == "mm"
+                || player_bday.split("/")[2] == "yyyy"
+                || player_country == "") {
+                alert("Insert valid values!");
+                return;
+            }else{
+                arrayPlayers[i].player_name = player_name;
+                arrayPlayers[i].player_bday = player_bday;
+                arrayPlayers[i].player_country = player_country;
+            }
+        }
+    }
+}else if(player_name == "" 
         || player_bday.split("/")[0] == "dd"
         || player_bday.split("/")[1] == "mm"
         || player_bday.split("/")[2] == "yyyy"
@@ -205,6 +262,7 @@ var player_country = document.getElementById("player_country").value;
             return;
         }
 }
+
 
 // ************************GAME SESSIONS************************
 

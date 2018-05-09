@@ -39,21 +39,21 @@
                         
                     <label for="labelCountry">Country:</label>
                     <select id="player_country" name="Countries">
-                            <option value="Germany">Germany</option>
                             <option value="Argentina">Argentina</option>
                             <option value="Australia">Australia</option>
                             <option value="Brasil">Brasil</option>
                             <option value="Bulgaria">Bulgaria</option>
                             <option value="Canada">Canada</option>
                             <option value="China">China</option>
-                            <option value="Chile">Chile</option>
                             <option value="Denmark">Denmark</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Portugal">Portugal</option>
                             <option value="Spain">Spain</option>
                     </select>
                 </form>
             </div>
             <div id="addPlayerButtons">
-                <button onclick="javascript: addPlayer()">Add Player</button>
+                <button onclick="javascript: addPlayer()">Save</button>
                 <button onclick="javascript: cancel(openPlayers())"> Cancel </button>
             </div>
         </div>
@@ -61,7 +61,7 @@
         <div id="playersButtons">
             <button onClick="javascript: openCreatePlayer()">ADD PLAYER</button>
             <button onClick="javascript: removerJogador()">REMOVE PLAYER</button>
-            <button onClick="javascript: editarJogador()">EDIT PLAYER</button>
+            <button onClick="javascript: openEditPlayer()">EDIT PLAYER</button>
         </div>
     </article>
 
