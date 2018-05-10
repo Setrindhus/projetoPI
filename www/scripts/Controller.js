@@ -147,34 +147,66 @@ function openCreatePlayer() {
 }
 
 function openCreateSession() {
+    playerList();
     openGameSessions();
     document.getElementById("gamesTable").style.display = "none";
     document.getElementById("sessionsButtons").style.display = "none";
     document.getElementById("addGameSessions").style.display = "block";
 }
 
+
 function openEditPlayer() {
+
 if(selectedPlayerID != void 0){
-    console.log("yaa");
     for(let i=0; i<arrayPlayers.length;i++){
-        console.log("yolol");
-        console.log("a"+arrayPlayers[i].player_id);
-        console.log(selectedPlayerID);
         if(selectedPlayerID == arrayPlayers[i].player_id){
-        console.log("yep");
-        console.log(arrayPlayers[i].player_bday);
             document.getElementById("player_name").value = arrayPlayers[i].player_name;
-            document.getElementById("player_bday").value = arrayPlayers[i].player_bday;
+            document.getElementById("player_bday").value = formatDate(arrayPlayers[i].player_bday);
             document.getElementById("player_country").value = arrayPlayers[i].player_country;
             break;
         }
-        }
+    }
+    auxPlayerID = selectedPlayerID;
         openCreatePlayer();
     }else{
         alert("Please select a Player!")
     }
 }
 
+function openEditSession() {
+
+    if(selectedGameSessionID != void 0){
+        for(let i=0; i<arrayGames.length;i++){
+            if(selectedGameSessionID == arrayGames[i].game_id){
+                document.getElementById("game_desc").value = arrayGames[i].game_desc;
+                document.getElementById("game_sDate").value = formatDate(arrayGames[i].game_sDate);
+                document.getElementById("playerList").value = arrayGames[i].game_player;
+                break;
+            }
+        }
+        auxSessionID = selectedGameSessionID;
+            openCreateSession();
+        }else{
+            alert("Please select a Player!")
+        }
+    }
+
+function formatDate(date){
+    
+    var dd = date.getDate();
+    var mm = date.getMonth()+1; 
+    var yyyy = date.getFullYear();
+    
+    if(dd<10) {
+        dd = '0'+dd
+    } 
+    
+    if(mm<10) {
+        mm = '0'+mm
+    } 
+    
+    return today = yyyy + '-' + mm + '-' + dd;
+}
 
 function cancel(open){
     
@@ -197,7 +229,9 @@ function cancel(open){
 // ************************PLAYERS************************
 
 var selectedPlayerID = void 0;
+var auxPlayerID = void 0;
 var selectedGameSessionID = void 0;
+var auxSessionID = void 0;
 
 function selectPlayer(id, tr) {
     selectedPlayerID = id;
@@ -220,9 +254,11 @@ function addPlayer() {
     var player_country = document.getElementById("player_country").value;
 
 
-if(selectedPlayerID != void 0){
+if(auxPlayerID != void 0){
     for(let i= 0; i<arrayPlayers.length;i++){
-        if(selectedPlayerID === arrayPlayers[i].id){
+        console.log(auxPlayerID);
+        console.log(arrayPlayers[i].player_id);
+        if(auxPlayerID == arrayPlayers[i].player_id){
             if(player_name == "" 
                 || player_bday.split("/")[0] == "dd"
                 || player_bday.split("/")[1] == "mm"
@@ -231,24 +267,61 @@ if(selectedPlayerID != void 0){
                 alert("Insert valid values!");
                 return;
             }else{
+                console.log("a"+player_bday);
+                
                 arrayPlayers[i].player_name = player_name;
-                arrayPlayers[i].player_bday = player_bday;
+                arrayPlayers[i].player_bday = new Date(player_bday);
                 arrayPlayers[i].player_country = player_country;
+                console.log(arrayPlayers[i]);
+                openPlayers();
+                return;
             }
         }
     }
 }else if(player_name == "" 
         || player_bday.split("/")[0] == "dd"
         || player_bday.split("/")[1] == "mm"
-        || player_bday.split("/")[2] == "yyyy"
-        || player_country == "") {
+        || player_bday.split("/")[2] == "yyyy") {
         alert("Insert valid values!");
         return;
     } else {
+        console.log("b");
         arrayPlayers.push(new Player(player_name, new Date(player_bday), player_country));
         openPlayers();
         return;
     }
+}
+
+function removePlayer(){
+    if(selectedPlayerID != void 0){
+    arrayPlayers.forEach(function(player,index){
+        if(selectedPlayerID == player.player_id){
+            arrayPlayers.splice(index,1);
+            /*console.log(selectedPlayerID);
+            for(let i= selectedPlayerID+1; i<arrayPlayers.length;i++){
+                arrayPlayers[i].player_id -= 1;
+                console.log(arrayPlayers[i+1].player_name+" "+arrayPlayers[i+1].player_id);
+            }*/
+        }
+    });
+    for(let i = 0; i<arrayGames.length;i++){
+        console.log("a "+selectedPlayerID);
+        if(selectedPlayerID == arrayGames[i].game_player.player_id){
+            console.log("b "+ selectedPlayerID);
+            
+            arrayGames.splice(i,1);
+            i -= 1;
+        }
+    }
+    /*arrayGames.forEach(function(game,index){
+        if(selectedPlayerID == game.game_player.player_id){
+            arrayGames.splice(index,1);
+        }
+    });*/
+    openPlayers();
+}else{
+    alert("Choose the player you want to remove!");
+}
 }
 
 
@@ -257,8 +330,27 @@ if(selectedPlayerID != void 0){
 function addSession() {
     var game_sDate = document.getElementById("game_sDate").value;
     var game_desc = document.getElementById("game_desc").value;
-    var game_player = document.getElementById("game_player").value;
+    var game_player = document.getElementById("playerList").value;
 
+    if(auxSessionID != void 0){
+        for(let i= 0; i<arrayGames.length;i++){
+            if(auxSessionID == arrayGames[i].game_id){
+                if(game_sDate.split("/")[0] == "dd"
+                    || game_sDate.split("/")[1] == "mm"
+                    || game_sDate.split("/")[2] == "yyyy"
+                    || game_desc == "") {
+                    alert("Insert valid values!");
+                    return;
+                }else{
+                    arrayGames[i].game_desc = game_desc;
+                    arrayGames[i].game_sDate = new Date(game_sDate);
+                    arrayGames[i].game_player = game_player;
+                    openGameSessions();
+                    return;
+                }
+            }
+        }
+    }else 
     if (game_sDate.split("/")[0] == "dd"
         || game_sDate.split("/")[1] == "mm"
         || game_sDate.split("/")[2] == "yyyy"
@@ -273,6 +365,36 @@ function addSession() {
     }
 }
 
+function removeSession(){
+    if(selectedGameSessionID != void 0){
+    arrayGames.forEach(function(game,index){
+        console.log("ee" + selectedGameSessionID);
+        if(selectedGameSessionID == game.game_id){
+            arrayGames.splice(index,1);
+        }
+    });
+    console.log(arrayGames.length);
+    openGameSessions();
+}else{
+    alert("Choose the game session you want to remove!");
+}
+}
+
+
+function playerList(){
+    var select = document.getElementById("playerList");
+    var fragment = document.createDocumentFragment();
+
+    arrayPlayers.forEach(function(player, index){
+        var option = document.createElement("option");
+        option.innerHTML = player.player_id + " - " + player.player_name;
+        option.value = player;
+        fragment.appendChild(option);
+    });
+
+    select.appendChild(fragment);
+}
+
 
 /* Criação de Tabelas */
 
@@ -282,6 +404,9 @@ function addSession() {
  */
 function createTable(array) {
     //Verifica qual a tabela
+    deleteElement("playersTable");
+    deleteElement("gamesTable");
+    if(array.length > 0){
     if (array[0] instanceof Player) {
         deleteElement("playersTable"); //Apaga a tabela para reconstruir
         var table = document.createElement("table");
@@ -327,6 +452,7 @@ function createTable(array) {
     }
 
     parent.appendChild(table); //adiciona a tabela ao elemento pai
+}
 }
 
 /**

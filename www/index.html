@@ -61,7 +61,7 @@
 
         <div id="playersButtons">
             <button onClick="javascript: openCreatePlayer()">ADD PLAYER</button>
-            <button onClick="javascript: removerJogador()">REMOVE PLAYER</button>
+            <button onClick="javascript: removePlayer()">REMOVE PLAYER</button>
             <button onClick="javascript: openEditPlayer()">EDIT PLAYER</button>
         </div>
     </article>
@@ -81,20 +81,20 @@
                     <label for="labelDescription">Description:</label>
                     <input type="text" id="game_desc" name="description" placeholder="Session Description">
 
-                    <label for="labelPlayerName">Player Name:</label>
-                    <input type="text" id="game_player" name="playerName" placeholder="Player Name">
+                    <label for="labelPlayerName">Player:</label>
+                    <select id="playerList"></select>
             </form>
         </div>
         <div id="addSessionButtons">
-                <button onclick="javascript: addSession()">Add Session</button>
+                <button onclick="javascript: addSession()">Save</button>
                 <button onclick="javascript: cancel(openGameSessions())"> Cancel </button>
             </div>
     </div>
 
     <div id="sessionsButtons">
         <button onClick="javascript: openCreateSession()">ADD SESSION</button>
-        <button onClick="javascript: removerJogador()">REMOVE SESSION</button>
-        <button onClick="javascript: editarJogador()">EDIT SESSION</button>
+        <button onClick="javascript: removeSession()">REMOVE SESSION</button>
+        <button onClick="javascript: openEditSession()">EDIT SESSION</button>
     </div>
 </article>
     
