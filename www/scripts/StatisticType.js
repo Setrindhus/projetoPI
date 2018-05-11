@@ -22,5 +22,8 @@ StatisticType.prototype.eloValue = function getEloValue(statName) {
 }
 
 StatisticType.prototype.toString = function () {
+    if(this.statType_name === "Game Time"){
+        return this.statType_name + " (min)";
+    }
     return this.statType_name;
 }

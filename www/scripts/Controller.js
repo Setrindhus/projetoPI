@@ -22,24 +22,24 @@ var s4 = new StatisticType("Destroyed Boxes", "Número de caixas destruídas");
 var s5 = new StatisticType("Kills", "Número de inimigos que matou");
 
 var arrayStatsTypes = [
-    s1,s2,s3,s4,s5
+    s1, s2, s3, s4, s5
 ];
 var arrayStats = [
-    new Statistic(240,s1,1),
-    new Statistic(5,s2,1),
-    new Statistic(22,s3,1),
-    new Statistic(10,s4,1),
-    new Statistic(55,s5,1),
-    new Statistic(446,s1,2),
-    new Statistic(7,s2,2),
-    new Statistic(49,s3,2),
-    new Statistic(16,s4,2),
-    new Statistic(123,s5,2),
-    new Statistic(180,s1,3),
-    new Statistic(5,s2,3),
-    new Statistic(27,s3,3),
-    new Statistic(12,s4,3),
-    new Statistic(48,s5,3)
+    new Statistic(240, s1, 1),
+    new Statistic(5, s2, 1),
+    new Statistic(22, s3, 1),
+    new Statistic(10, s4, 1),
+    new Statistic(55, s5, 1),
+    new Statistic(446, s1, 2),
+    new Statistic(7, s2, 2),
+    new Statistic(49, s3, 2),
+    new Statistic(16, s4, 2),
+    new Statistic(123, s5, 2),
+    new Statistic(180, s1, 3),
+    new Statistic(5, s2, 3),
+    new Statistic(27, s3, 3),
+    new Statistic(12, s4, 3),
+    new Statistic(48, s5, 3)
 ];
 
 var active_tab = "home";
@@ -111,18 +111,21 @@ function resetSelecteds() {
     selectedPlayerID = void 0;
 }
 
-function calculateLeaderboardRanks(){
+/**
+ * Retorna uma tabela com a posição no ranking e nome do jogador, ordenada por ordem decrescente do score dos jogadores
+ */
+function calculateLeaderboardRanks() {
     let leaderboard = [];
 
-    for(let i = 0; i<arrayPlayers.length;i++){
+    for (let i = 0; i < arrayPlayers.length; i++) {
         let player = arrayPlayers[i];
         let elo = 0;
-        for(let j = 0; j<arrayGames.length;j++){
+        for (let j = 0; j < arrayGames.length; j++) {
             let gameSession = arrayGames[j];
-            if(player == gameSession.game_player){
-                for(var y = 0;y<arrayStats.length;y++){
+            if (player == gameSession.game_player) {
+                for (var y = 0; y < arrayStats.length; y++) {
                     let stat = arrayStats[y];
-                    if(stat.stat_game == gameSession){
+                    if (stat.stat_game == gameSession) {
                         elo += stat.eloScore(stat.stat_type);
                     }
                 }
@@ -135,20 +138,70 @@ function calculateLeaderboardRanks(){
         leaderboard.push(rank);
     }
 
-    leaderboard.sort(function(a,b){
+    leaderboard.sort(function (a, b) {
         return a.score - b.score;
     }).reverse();
 
     var ranks = [];
-    for(let i = 0; i<leaderboard.length;i++){
+    for (let i = 0; i < leaderboard.length; i++) {
         let rank = {
-            pos: i+1,
+            pos: i + 1,
             playerName: leaderboard[i].playerName
         }
         ranks.push(rank);
     }
 
     return ranks;
+}
+
+/**
+ * Retorna uma tabela com tipo de estatística e os seus valores totais do jogador
+ * @param {Integer} id 
+ */
+function playerTotalStats(id) {
+    let arrayOfStats = [];
+    let arrayOfTotalStats = [];
+    for (let i = 0; i < arrayGames.length; i++) {
+        let gameSession = arrayGames[i];
+        if (id == gameSession.game_player.player_id) {
+            for (let j = 0; j < arrayStats.length; j++) {
+                let stat = arrayStats[j];
+                if (arrayStats[j].stat_game == gameSession) {
+                    let statToArray = {
+                        statType: stat.stat_type,
+                        statValue: stat.stat_value
+                    }
+                    arrayOfStats.push(statToArray);
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < arrayOfStats.length; i++) {
+        let statTotal = {
+            statType: arrayOfStats[i].statType,
+            statTotalValue: arrayOfStats[i].statValue
+        }
+
+        let inArray = false;
+
+        for (let j = 0; j < arrayOfTotalStats.length; j++) {
+            if (statTotal.statType == arrayOfTotalStats[j].statType) {
+                inArray = true;
+            }
+        }
+
+        if (!inArray) {
+            for (let j = 0; j < arrayOfStats.length; j++) {
+                if (arrayOfStats[i].statType == arrayOfStats[j].statType) {
+                    statTotal.statTotalValue += arrayOfStats[j].statValue;
+                }
+            }
+            arrayOfTotalStats.push(statTotal);
+        }
+    }
+
+    return arrayOfTotalStats;
 }
 
 /**
@@ -205,7 +258,10 @@ function openGameSessions() {
 
 function openStats() {
     closeTabs();
-    document.getElementById("stats").style.display = "block";
+    let parent = document.getElementById("stats");
+    parent.style.display = "block";
+    parent.firstElementChild.style.display = "block";
+    document.getElementById("chartContainer").style.display = "none";
     createTable(calculateLeaderboardRanks());
 
     active_tab = "stats"
@@ -224,6 +280,14 @@ function openCreateSession() {
     document.getElementById("gamesTable").style.display = "none";
     document.getElementById("sessionsButtons").style.display = "none";
     document.getElementById("addGameSessions").style.display = "block";
+}
+
+function openPlayerStats(){
+    openStats();
+    let parent = document.getElementById("stats");
+    console.log(parent.firstElementChild);
+    parent.firstElementChild.style.display = "none";
+    document.getElementById("chartContainer").style.display = "block";
 }
 
 function openEdit() {
@@ -248,10 +312,10 @@ function cancel(open) {
 
 /* Controladores */
 
-// ************************PLAYERS************************
-
 var selectedPlayerID = void 0;
 var selectedGameSessionID = void 0;
+
+// ************************PLAYERS************************
 
 /**
  * Atualiza a variável selectedPlayerID para a do jogador seleccionado e realça o jogador seleccionado na tabela
@@ -260,17 +324,6 @@ var selectedGameSessionID = void 0;
  */
 function selectPlayer(id, tr) {
     selectedPlayerID = id;
-    eraseTablesHighlights();
-    highlightSelectedTableRow(tr);
-}
-
-/**
- * Atualiza a variável selectedGameSessionID para a do jogo seleccionado e realça o jogo seleccionado na tabela
- * @param {Integer} id 
- * @param {HTMLTableRowElement} tr 
- */
-function selectGameSession(id, tr) {
-    selectedGameSessionID = id;
     eraseTablesHighlights();
     highlightSelectedTableRow(tr);
 }
@@ -300,6 +353,17 @@ function addPlayer() {
 
 // ************************GAME SESSIONS************************
 
+/**
+ * Atualiza a variável selectedGameSessionID para a do jogo seleccionado e realça o jogo seleccionado na tabela
+ * @param {Integer} id 
+ * @param {HTMLTableRowElement} tr 
+ */
+function selectGameSession(id, tr) {
+    selectedGameSessionID = id;
+    eraseTablesHighlights();
+    highlightSelectedTableRow(tr);
+}
+
 function addSession() {
     var game_sDate = document.getElementById("game_sDate").value;
     var game_desc = document.getElementById("game_desc").value;
@@ -317,6 +381,50 @@ function addSession() {
         openGameSessions();
         return;
     }
+}
+
+// ************************STATISTICS************************
+
+function selectPlayerStats(id) {
+    let player = void 0;
+    for(let i = 0; i<arrayPlayers.length ; i++){
+        if(arrayPlayers[i].player_id == id){
+            player = arrayPlayers[i];
+        }
+    }
+    openPlayerStats();
+
+    playerColumnGraph(playerTotalStats(id),player);
+}
+
+function playerColumnGraph(array, player) {
+    let dataArray = [];
+    for(let i = 0; i<array.length; i++){
+        let data = {
+            y: array[i].statTotalValue,
+            label: array[i].statType
+        }
+        dataArray.push(data);
+    }
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2", // "light1", "light2", "dark1", "dark2"
+        title:{
+            text: player.player_name + " Stats"
+        },
+        axisY: {
+            title: "Value"
+        },
+        data: [{        
+            type: "column",  
+            /* showInLegend: true, 
+            legendMarkerColor: "grey",
+            legendText: "MMbbl = one million barrels", */
+            dataPoints: dataArray
+        }]
+    });
+    chart.render();
 }
 
 
@@ -371,6 +479,8 @@ function createTable(array) {
                 tr.onclick = function () { selectPlayer(tr.firstElementChild.textContent, tr) };
             } else if (array[0] instanceof GameSession) {
                 tr.onclick = function () { selectGameSession(tr.firstElementChild.textContent, tr) };
+            } else {
+                tr.onclick = function () { selectPlayerStats(tr.firstElementChild.textContent) };
             }
 
             table.appendChild(tr); //adiciona a fila a tabela
@@ -434,10 +544,10 @@ function tableHeader(array) {
             else if (property.includes("_game")) {
                 th.textContent = "Game Session";
                 thr.appendChild(th);
-            } else if(property.includes("playerName")){
+            } else if (property.includes("playerName")) {
                 th.textContent = "Player";
                 thr.appendChild(th);
-            } else if(property.includes("pos")){
+            } else if (property.includes("pos")) {
                 th.textContent = "Rank";
                 thr.appendChild(th);
             } else {
