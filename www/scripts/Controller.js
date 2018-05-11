@@ -283,18 +283,12 @@ function openCreateSession() {
     document.getElementById("addGameSessions").style.display = "block";
 }
 
-<<<<<<< HEAD
-=======
 function openPlayerStats(){
     openStats();
     let parent = document.getElementById("stats");
-    console.log(parent.firstElementChild);
     parent.firstElementChild.style.display = "none";
     document.getElementById("chartContainer").style.display = "block";
 }
-
-function openEdit() {
->>>>>>> stats
 
 function openEditPlayer() {
 
@@ -516,7 +510,6 @@ function addSession() {
     }
 }
 
-<<<<<<< HEAD
 function removeSession(){
     if(selectedGameSessionID != void 0){
     arrayGames.forEach(function(game,index){
@@ -545,13 +538,14 @@ function playerList(){
     });
 
     select.appendChild(fragment);
-=======
+}
+
 // ************************STATISTICS************************
 
 function selectPlayerStats(id) {
     let player = void 0;
     for(let i = 0; i<arrayPlayers.length ; i++){
-        if(arrayPlayers[i].player_id == id){
+        if(arrayPlayers[i].player_id === id){
             player = arrayPlayers[i];
         }
     }
@@ -588,7 +582,6 @@ function playerColumnGraph(array, player) {
         }]
     });
     chart.render();
->>>>>>> stats
 }
 
 
@@ -624,19 +617,19 @@ function createTable(array) {
 
     //Cria a tabela
     for (let index in array) {
-        var player = array[index];
+        let object = array[index];
         let tr = document.createElement("tr");
-        for (let property in player) {
+        for (let property in object) {
 
             var td = document.createElement("td");
-            if (!(player[property] instanceof Function)) {
+            if (!(object[property] instanceof Function)) {
 
                 if (property.includes("_bday")) { //Se for a data de nascimento
-                    td.textContent = calculateAge(player[property]); //adiciona a idade a celula
+                    td.textContent = calculateAge(object[property]); //adiciona a idade a celula
                 } else if (property.includes("_sDate")) {
-                    td.textContent = player[property].toISOString().split("T")[0];
+                    td.textContent = object[property].toISOString().split("T")[0];
                 } else {
-                    td.textContent = player[property]; //adiciona o valor a uma celula
+                    td.textContent = object[property]; //adiciona o valor a uma celula
                 }
 
                 tr.appendChild(td); //adiciona a celula a fila
@@ -646,8 +639,9 @@ function createTable(array) {
                 tr.onclick = function () { selectPlayer(tr.firstElementChild.textContent, tr) };
             } else if (array[0] instanceof GameSession) {
                 tr.onclick = function () { selectGameSession(tr.firstElementChild.textContent, tr) };
-            } else {
-                tr.onclick = function () { selectPlayerStats(tr.firstElementChild.textContent) };
+            } else if (property.includes("playerName")){
+                console.log(object.playerName.player_id);
+                tr.onclick = function () { selectPlayerStats(object.playerName.player_id) };
             }
 
             table.appendChild(tr); //adiciona a fila a tabela
