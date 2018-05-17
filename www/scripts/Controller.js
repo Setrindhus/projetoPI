@@ -53,39 +53,50 @@ function highlightSelectedTab() {
     eraseTabsHighlights();
     switch (active_tab) {
         case "home":
-            document.getElementsByTagName("nav")[0].firstElementChild.style.backgroundColor = "dimgray";
+            document.getElementById("menu").firstElementChild.style.color = "pink";
             break;
         case "players":
-            document.getElementsByTagName("nav")[0].children[1].style.backgroundColor = "dimgray";
+            document.getElementById("menu").children[1].style.color = "pink";
             break;
         case "gameSessions":
-            document.getElementsByTagName("nav")[0].children[2].style.backgroundColor = "dimgray";
+            document.getElementById("menu").children[2].style.color = "pink";
             break;
         case "stats":
-            document.getElementsByTagName("nav")[0].children[3].style.backgroundColor = "dimgray";
+            document.getElementById("menu").children[3].style.color = "pink";
             break;
     }
 }
 
 function eraseTabsHighlights() {
-    for (let i = 0; i < document.getElementsByTagName("nav")[0].children.length; i++) {
-        let li = document.getElementsByTagName("nav")[0].children[i];
-        li.style.backgroundColor = 'rgb(150, 150, 150)';
+    for (let i = 0; i < document.getElementById("menu").children.length; i++) {
+        let li = document.getElementById("menu").children[i];
+        li.style.color = "white";
     }
 }
 
 function highlightSelectedTableRow(tr) {
-    tr.style.backgroundColor = "darkblue";
+    if(active_tab === "gameSessions"){
+        tr.style.backgroundColor = 'rgb(36, 36, 144)';
+    } else {
+        tr.style.backgroundColor = 'rgb(134, 26, 26)';
+    }
+    tr.style.color = "white";
 }
 
 function eraseTablesHighlights() {
     var tables = document.getElementsByTagName("table");
     for (let i = 0; i < tables.length; i++) {
         let table = tables[i];
+
         for (let j = 1; j < table.childNodes.length; j++) {
             let tr = table.childNodes[j];
-            tr.style.backgroundColor = "white";
-        }
+            tr.style.color = "black";
+            if(j%2 === 0){
+                tr.style.backgroundColor = "white";
+            } else {
+                tr.style.backgroundColor = 'rgb(211, 211, 211)';
+            }
+        } 
     }
 }
 
@@ -258,9 +269,8 @@ function openGameSessions() {
 
 function openStats() {
     closeTabs();
-    let parent = document.getElementById("stats");
-    parent.style.display = "block";
-    parent.firstElementChild.style.display = "block";
+    document.getElementById("stats").firstElementChild.firstElementChild.textContent = "STATS";
+    document.getElementById("stats").style.display = "block";
     document.getElementById("chartContainer").style.display = "none";
     createTable(calculateLeaderboardRanks());
 
@@ -285,8 +295,7 @@ function openCreateSession() {
 
 function openPlayerStats(){
     openStats();
-    let parent = document.getElementById("stats");
-    parent.firstElementChild.style.display = "none";
+    document.getElementById("leaderboard").style.display = "none";
     document.getElementById("chartContainer").style.display = "block";
 }
 
@@ -555,6 +564,8 @@ function selectPlayerStats(id) {
 }
 
 function playerColumnGraph(array, player) {
+    document.getElementById("stats").firstElementChild.firstElementChild.textContent = player.player_name.toUpperCase() + " STATS";
+
     let dataArray = [];
     for(let i = 0; i<array.length; i++){
         let data = {
@@ -567,9 +578,6 @@ function playerColumnGraph(array, player) {
     var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "light2", // "light1", "light2", "dark1", "dark2"
-        title:{
-            text: player.player_name + " Stats"
-        },
         axisY: {
             title: "Value"
         },
@@ -640,12 +648,12 @@ function createTable(array) {
             } else if (array[0] instanceof GameSession) {
                 tr.onclick = function () { selectGameSession(tr.firstElementChild.textContent, tr) };
             } else if (property.includes("playerName")){
-                console.log(object.playerName.player_id);
                 tr.onclick = function () { selectPlayerStats(object.playerName.player_id) };
             }
 
             table.appendChild(tr); //adiciona a fila a tabela
         }
+
     }
 
     parent.appendChild(table); //adiciona a tabela ao elemento pai
