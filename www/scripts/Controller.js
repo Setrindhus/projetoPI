@@ -269,18 +269,51 @@ function openStats() {
 }
 
 function openCreatePlayer() {
-    openPlayers();
+    //openPlayers();
+    console.log(selectedPlayerID);
+    if(arrayPlayers.length != 0){
     document.getElementById("playersTable").style.display = "none";
+    }
     document.getElementById("playersButtons").style.display = "none";
     document.getElementById("addPlayers").style.display = "block";
+    if(selectedPlayerID == void 0){
+        document.getElementById("player_name").value = "";
+        document.getElementById("player_bday").value = "";
+        //document.getElementById("player_country").value = arrayPl;
+        selectElement("player_country","AR");
+    }
+    resetSelecteds();
+    console.log(selectedPlayerID);
+}
+
+function selectElement(id, valueToSelect)
+{    
+    var element = document.getElementById(id);
+    element.value = valueToSelect;
 }
 
 function openCreateSession() {
+    clearPlayerListOptions();
     playerList();
-    openGameSessions();
+    //openGameSessions();
+    if(arrayGames.length != 0){
     document.getElementById("gamesTable").style.display = "none";
+    }
     document.getElementById("sessionsButtons").style.display = "none";
     document.getElementById("addGameSessions").style.display = "block";
+
+    if(selectedGameSessionID == void 0){
+        document.getElementById("game_desc").value = "";
+        document.getElementById("game_sDate").value = "";
+        document.getElementById("playerList").value = "";
+        /*for(let i = 0;i<arrayPlayers.length;i++){
+            if(arrayPlayers[i] != null){
+        document.getElementById("playerList").value = arrayPlayers[i].player_id;
+        break;
+    }
+    }*/
+    }
+    resetSelecteds();
 }
 
 function openPlayerStats(){
@@ -315,7 +348,11 @@ function openEditSession() {
             if(selectedGameSessionID == arrayGames[i].game_id){
                 document.getElementById("game_desc").value = arrayGames[i].game_desc;
                 document.getElementById("game_sDate").value = formatDate(arrayGames[i].game_sDate);
-                document.getElementById("playerList").value = arrayGames[i].game_player;
+                var str = "" + arrayGames[i].game_player.player_id;
+                console.log(str);
+                console.log(document.getElementById("playerList"));
+                document.getElementById("playerList").value = str.toString();
+                console.log("c" + document.getElementById("playerList").value);
                 break;
             }
         }
@@ -431,11 +468,6 @@ function removePlayer(){
     arrayPlayers.forEach(function(player,index){
         if(selectedPlayerID == player.player_id){
             arrayPlayers.splice(index,1);
-            /*console.log(selectedPlayerID);
-            for(let i= selectedPlayerID+1; i<arrayPlayers.length;i++){
-                arrayPlayers[i].player_id -= 1;
-                console.log(arrayPlayers[i+1].player_name+" "+arrayPlayers[i+1].player_id);
-            }*/
         }
     });
     for(let i = 0; i<arrayGames.length;i++){
@@ -447,11 +479,8 @@ function removePlayer(){
             i -= 1;
         }
     }
-    /*arrayGames.forEach(function(game,index){
-        if(selectedPlayerID == game.game_player.player_id){
-            arrayGames.splice(index,1);
-        }
-    });*/
+    clearPlayerListOptions();
+
     openPlayers();
 }else{
     alert("Choose the player you want to remove!");
@@ -489,7 +518,14 @@ function addSession() {
                 }else{
                     arrayGames[i].game_desc = game_desc;
                     arrayGames[i].game_sDate = new Date(game_sDate);
-                    arrayGames[i].game_player = game_player;
+
+                    let player = null;
+                    for(let i = 0;i<arrayPlayers.length;i++){
+                    if(arrayPlayers[i].player_id == game_player){
+                        player = arrayPlayers[i];
+                        }
+                    }
+                    arrayGames[i].game_player = player;
                     openGameSessions();
                     return;
                 }
@@ -504,7 +540,15 @@ function addSession() {
         alert("Insert valid values!");
         return;
     } else {
-        arrayGames.push(new GameSession(new Date(game_sDate), game_desc, game_player));
+        console.log(game_player);
+        let player = null;
+        for(let i = 0;i<arrayPlayers.length;i++){
+            if(arrayPlayers[i].player_id == game_player){
+                player = arrayPlayers[i];
+            }
+        }
+
+        arrayGames.push(new GameSession(new Date(game_sDate), game_desc, player));
         openGameSessions();
         return;
     }
@@ -533,11 +577,19 @@ function playerList(){
     arrayPlayers.forEach(function(player, index){
         var option = document.createElement("option");
         option.innerHTML = player.player_id + " - " + player.player_name;
-        option.value = player;
+        option.value = player.player_id;
+        console.log(player);
         fragment.appendChild(option);
     });
 
     select.appendChild(fragment);
+}
+
+function clearPlayerListOptions()
+{
+    var select = document.getElementById("playerList");
+    for (var i = select.options.length - 1 ; i >= 0 ; i--)
+        select.remove(i);
 }
 
 // ************************STATISTICS************************
