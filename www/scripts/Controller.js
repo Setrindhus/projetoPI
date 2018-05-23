@@ -348,11 +348,15 @@ function openEditSession() {
             if(selectedGameSessionID == arrayGames[i].game_id){
                 document.getElementById("game_desc").value = arrayGames[i].game_desc;
                 document.getElementById("game_sDate").value = formatDate(arrayGames[i].game_sDate);
-                var str = "" + arrayGames[i].game_player.player_id;
-                console.log(str);
+                let str = "" + arrayGames[i].game_player.player_id;
+                //console.log(str);
                 console.log(document.getElementById("playerList"));
-                document.getElementById("playerList").value = str.toString();
+                document.getElementById("playerList").value = str;
+                console.log(arrayGames[i].game_player.player_id);
                 console.log("c" + document.getElementById("playerList").value);
+                if(document.getElementById("playerList").value === str){
+                    console.log("True");
+                }
                 break;
             }
         }
@@ -417,7 +421,7 @@ function selectPlayer(id, tr) {
 }
 
 /**
- * Creates a player and puts in the array
+ * Creates or edits a player
  */
 function addPlayer() {
     var player_name = document.getElementById("player_name").value;
@@ -577,7 +581,8 @@ function playerList(){
     arrayPlayers.forEach(function(player, index){
         var option = document.createElement("option");
         option.innerHTML = player.player_id + " - " + player.player_name;
-        option.value = player.player_id;
+        let p = ""+player.player_id;
+        option.value = p;
         console.log(player);
         fragment.appendChild(option);
     });
