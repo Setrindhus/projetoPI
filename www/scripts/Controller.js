@@ -120,6 +120,8 @@ function closeTabs() {
 function resetSelecteds() {
     selectedGameSessionID = void 0;
     selectedPlayerID = void 0;
+    auxPlayerID = void 0;
+    auxSessionID = void 0;
 }
 
 /**
@@ -254,6 +256,13 @@ function openPlayers() {
 
     active_tab = "players"
     highlightSelectedTab();
+
+    //limpa campos do player
+    document.getElementById("player_name").value = "";
+    document.getElementById("player_bday").value = "";
+    document.getElementById("player_country").value = "Germany";
+
+    resetSelecteds();
 }
 
 function openGameSessions() {
@@ -265,6 +274,11 @@ function openGameSessions() {
 
     active_tab = "gameSessions"
     highlightSelectedTab();
+
+    //Limpa forms do gameSessions
+    document.getElementById("game_sDate").value = "";
+    document.getElementById("game_desc").value = "";
+    document.getElementById("game_player").value = "";
 }
 
 function openStats() {
