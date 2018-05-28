@@ -278,7 +278,6 @@ function openGameSessions() {
     //Limpa forms do gameSessions
     document.getElementById("game_sDate").value = "";
     document.getElementById("game_desc").value = "";
-    document.getElementById("game_player").value = "";
 }
 
 function openStats() {
