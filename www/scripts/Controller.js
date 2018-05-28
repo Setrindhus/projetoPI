@@ -542,14 +542,7 @@ function addSession() {
                 }else{
                     arrayGames[i].game_desc = game_desc;
                     arrayGames[i].game_sDate = new Date(game_sDate);
-
-                    let player = null;
-                    for(let i = 0;i<arrayPlayers.length;i++){
-                    if(arrayPlayers[i].player_id == game_player){
-                        player = arrayPlayers[i];
-                        }
-                    }
-                    arrayGames[i].game_player = player;
+                    arrayGames[i].game_player = game_player;
                     openGameSessions();
                     return;
                 }
