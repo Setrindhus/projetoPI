@@ -324,6 +324,8 @@ function openCreateSession() {
     }
     document.getElementById("sessionsButtons").style.display = "none";
     document.getElementById("addGameSessions").style.display = "block";
+    document.getElementById("addBS").style.display = "inline";
+    document.getElementById("editBS").style.display = "none";
 
     if(selectedGameSessionID == void 0){
         document.getElementById("game_desc").value = "";
@@ -389,6 +391,8 @@ function openEditSession() {
         document.getElementById("sessionsButtons").style.display = "none";
         document.getElementById("addGameSessions").style.display = "block";
 
+        document.getElementById("addBS").style.display = "none";
+        document.getElementById("editBS").style.display = "inline";
         }else{
             alert("Please select a Player!")
         }
@@ -537,11 +541,13 @@ function selectGameSession(id, tr) {
     highlightSelectedTableRow(tr);
 }
 
-function addSession() {
+function addSession(command) {
     var game_sDate = document.getElementById("game_sDate").value;
     var game_desc = document.getElementById("game_desc").value;
     var game_player = document.getElementById("playerList").value;
 
+    switch(command){
+        case "Edit":
     if(auxSessionID != void 0){
         for(let i= 0; i<arrayGames.length;i++){
             if(auxSessionID == arrayGames[i].game_id){
@@ -566,7 +572,8 @@ function addSession() {
                 }
             }
         }
-    }else 
+    }
+    case "Add":
     if (game_sDate.split("/")[0] == "dd"
         || game_sDate.split("/")[1] == "mm"
         || game_sDate.split("/")[2] == "yyyy"
@@ -586,6 +593,7 @@ function addSession() {
         openGameSessions();
         return;
     }
+}
 }
 
 function removeSession(){
