@@ -145,7 +145,7 @@ button:hover{
 
 /* FORMS */
 
-.addPlayerForm div {
+.addPlayerForm,.addGameSessionsForm div {
     padding: 10px;
 
 }
