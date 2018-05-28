@@ -1,6 +1,18 @@
 body{
-    margin-top: 70px;
     text-align: center;
+    background-image: url("../images/wallpaper.jpg");
+    background-attachment: fixed;
+}
+
+#wrapper {
+    box-sizing: border-box;
+    padding-top: 30px;
+    height: 100vh;
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+    background: rgba(255, 255, 255,0.5);
+    box-shadow: 0px 0px 20px black;
 }
 
 article {
@@ -53,9 +65,9 @@ nav a:hover {
 
 table {
     border-collapse: collapse;
-    width: 60%;
-    margin-left: 20%;
-    margin-right: 20%;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
     margin-bottom: 30px;
 
     text-transform: uppercase;
@@ -111,9 +123,9 @@ tr:hover {
 }
 
 #stats table {
-    width: 40%;
-    margin-left: 30%;
-    margin-right: 30%;
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
 }
 
 #chartContainer {
@@ -145,7 +157,14 @@ button:hover{
 
 /* FORMS */
 
-.addPlayerForm,.addGameSessionsForm div {
-    padding: 10px;
+.addPlayerForm div , .addGameSessionsForm div {
+    padding: 5px;
+}
 
+.addPlayerForm input,select , .addGameSessionsForm input, select {
+    border-radius: 2px;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }

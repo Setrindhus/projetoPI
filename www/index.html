@@ -25,97 +25,103 @@
             <a href="javascript: openStats()">Statistics</a>
         </div>
     </nav>
-    <article id="home">
-        <h1>HOME</h1>
-    </article>
-    <article id="players">
-        <div class="index">
-            <h1>PLAYERS</h1>
-        </div>
-
-        <div id="addPlayers">
-            <div class="addPlayerForm">
-                <form action="">
-                    <div>
-                        <label for="labelName">Name:</label>
-                        <input type="text" id="player_name" name="name" placeholder="Player Name">
-                    </div>
-                    <div>
-                        <label for="labelBDay">Birthday:</label>
-                        <input type="date" id="player_bday" name="birthday" placeholder="dd/mm/aaaa">
-                    </div>
-
-                    <div>
-                        <label for="labelCountry">Country:</label>
-                        <select id="player_country" name="Countries">
-                            <option value="AR">Argentina</option>
-                            <option value="AU">Australia</option>
-                            <option value="BR">Brasil</option>
-                            <option value="BG">Bulgaria</option>
-                            <option value="CA">Canada</option>
-                            <option value="CL">Chile</option>
-                            <option value="CN">China</option>
-                            <option value="DK">Denmark</option>
-                            <option value="DE">Germany</option>
-                            <option value="PT">Portugal</option>
-                            <option value="ES">Spain</option>
-                        </select>
-                    </div>
-                </form>
+    <div id="wrapper">
+        <article id="home">
+            <h1>HOME</h1>
+        </article>
+        <article id="players">
+            <div class="index">
+                <h1>PLAYERS</h1>
             </div>
-            <div id="addPlayerButtons">
-                <button onclick="javascript: addPlayer()">Save</button>
-                <button onclick="javascript: cancel(openPlayers())"> Cancel </button>
+
+            <div id="addPlayers">
+                <div class="addPlayerForm">
+                    <form action="">
+                        <div>
+                            <label for="labelName">Name:</label>
+                            <input type="text" id="player_name" name="name" placeholder="Player Name">
+                        </div>
+                        <div>
+                            <label for="labelBDay">Birthday:</label>
+                            <input type="date" id="player_bday" name="birthday" placeholder="dd/mm/aaaa">
+                        </div>
+
+                        <div>
+                            <label for="labelCountry">Country:</label>
+                            <select id="player_country" name="Countries">
+                                <option value="AR">Argentina</option>
+                                <option value="AU">Australia</option>
+                                <option value="BR">Brasil</option>
+                                <option value="BG">Bulgaria</option>
+                                <option value="CA">Canada</option>
+                                <option value="CL">Chile</option>
+                                <option value="CN">China</option>
+                                <option value="DK">Denmark</option>
+                                <option value="DE">Germany</option>
+                                <option value="PT">Portugal</option>
+                                <option value="ES">Spain</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div id="addPlayerButtons">
+                    <button onclick="javascript: addPlayer()">Save</button>
+                    <button onclick="javascript: cancel(openPlayers())"> Cancel </button>
+                </div>
             </div>
-        </div>
 
-        <div id="playersButtons">
-            <button onClick="javascript: openCreatePlayer()">ADD PLAYER</button>
-            <button onClick="javascript: removePlayer()">REMOVE PLAYER</button>
-            <button onClick="javascript: openEditPlayer()">EDIT PLAYER</button>
-        </div>
-    </article>
-
-    <!-- Screen to add and edit players -->
-    <article id="gameSessions">
-        <div class="index">
-            <h1>GAMES</h1>
-        </div>
-        <!-- Screen to add and edit sessions -->
-        <div id="addGameSessions">
-            <div class="addGameSessionsForm">
-                <form action="">
-                    <label for="labelStartDate">Start Date:</label>
-                    <input type="date" id="game_sDate" name="startDate" placeholder="dd/mm/aaaa">
-
-                    <label for="labelDescription">Description:</label>
-                    <input type="text" id="game_desc" name="description" placeholder="Session Description">
-
-                    <label for="labelPlayerName">Player:</label>
-                    <select id="playerList"></select>
-                </form>
+            <div id="playersButtons">
+                <button onClick="javascript: openCreatePlayer()">ADD PLAYER</button>
+                <button onClick="javascript: removePlayer()">REMOVE PLAYER</button>
+                <button onClick="javascript: openEditPlayer()">EDIT PLAYER</button>
             </div>
-            <div id="addSessionButtons">
-                <button onclick="javascript: addSession()">Save</button>
-                <button onclick="javascript: cancel(openGameSessions())"> Cancel </button>
+        </article>
+
+        <!-- Screen to add and edit players -->
+        <article id="gameSessions">
+            <div class="index">
+                <h1>GAMES</h1>
             </div>
-        </div>
+            <!-- Screen to add and edit sessions -->
+            <div id="addGameSessions">
+                <div class="addGameSessionsForm">
+                    <form action="">
+                        <div>
+                            <label for="labelStartDate">Start Date:</label>
+                            <input type="date" id="game_sDate" name="startDate" placeholder="dd/mm/aaaa">
+                        </div>
+                        <div>
+                            <label for="labelDescription">Description:</label>
+                            <input type="text" id="game_desc" name="description" placeholder="Session Description">
+                        </div>
+                        <div>
+                            <label for="labelPlayerName">Player:</label>
+                            <select id="playerList"></select>
+                        </div>
+                    </form>
+                </div>
+                <div id="addSessionButtons">
+                    <button onclick="javascript: addSession()">Save</button>
+                    <button onclick="javascript: cancel(openGameSessions())"> Cancel </button>
+                </div>
+            </div>
 
-        <div id="sessionsButtons">
-            <button onClick="javascript: openCreateSession()">ADD SESSION</button>
-            <button onClick="javascript: removeSession()">REMOVE SESSION</button>
-            <button onClick="javascript: openEditSession()">EDIT SESSION</button>
-        </div>
-    </article>
+            <div id="sessionsButtons">
+                <button onClick="javascript: openCreateSession()">ADD SESSION</button>
+                <button onClick="javascript: removeSession()">REMOVE SESSION</button>
+                <button onClick="javascript: openEditSession()">EDIT SESSION</button>
+            </div>
+        </article>
 
-    <article id="stats">
-        <div class="index">
-            <h1>STATS</h1>
-        </div>
-        <div id="chartContainer">
+        <article id="stats">
+            <div class="index">
+                <h1>STATS</h1>
+            </div>
+            <div id="chartContainer">
 
-        </div>
-    </article>
+            </div>
+        </article>
+    </div>
 </body>
 
 </html>
