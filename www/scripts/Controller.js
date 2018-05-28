@@ -367,24 +367,21 @@ if(selectedPlayerID != void 0){
 function openEditSession() {
 
     if(selectedGameSessionID != void 0){
+        playerList(); //Cria as opções no form
         for(let i=0; i<arrayGames.length;i++){
             if(selectedGameSessionID == arrayGames[i].game_id){
                 document.getElementById("game_desc").value = arrayGames[i].game_desc;
                 document.getElementById("game_sDate").value = formatDate(arrayGames[i].game_sDate);
-                let str = "" + arrayGames[i].game_player.player_id;
-                //console.log(str);
-                console.log(document.getElementById("playerList"));
-                document.getElementById("playerList").value = str;
-                console.log(arrayGames[i].game_player.player_id);
-                console.log("c" + document.getElementById("playerList").value);
-                if(document.getElementById("playerList").value === str){
-                    console.log("True");
-                }
+                document.getElementById("playerList").value = arrayGames[i].game_player;
                 break;
             }
         }
         auxSessionID = selectedGameSessionID;
-            openCreateSession();
+        //Abre os Forms
+        document.getElementById("gamesTable").style.display = "none";
+        document.getElementById("sessionsButtons").style.display = "none";
+        document.getElementById("addGameSessions").style.display = "block";
+
         }else{
             alert("Please select a Player!")
         }
@@ -599,14 +596,13 @@ function removeSession(){
 
 function playerList(){
     var select = document.getElementById("playerList");
+    select.innerHTML = '';
     var fragment = document.createDocumentFragment();
 
     arrayPlayers.forEach(function(player, index){
         var option = document.createElement("option");
         option.innerHTML = player.player_id + " - " + player.player_name;
-        let p = ""+player.player_id;
-        option.value = p;
-        console.log(player);
+        option.value = player;
         fragment.appendChild(option);
     });
 
