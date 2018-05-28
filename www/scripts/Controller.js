@@ -120,8 +120,8 @@ function closeTabs() {
 function resetSelecteds() {
     selectedGameSessionID = void 0;
     selectedPlayerID = void 0;
-    auxPlayerID = void 0;
-    auxSessionID = void 0;
+    //auxPlayerID = void 0;
+    //auxSessionID = void 0;
 }
 
 /**
@@ -369,7 +369,7 @@ function openEditSession() {
             if(selectedGameSessionID == arrayGames[i].game_id){
                 document.getElementById("game_desc").value = arrayGames[i].game_desc;
                 document.getElementById("game_sDate").value = formatDate(arrayGames[i].game_sDate);
-                document.getElementById("playerList").value = arrayGames[i].game_player;
+                document.getElementById("playerList").value = arrayGames[i].game_player.player_id;
                 break;
             }
         }
@@ -539,7 +539,13 @@ function addSession() {
                 }else{
                     arrayGames[i].game_desc = game_desc;
                     arrayGames[i].game_sDate = new Date(game_sDate);
-                    arrayGames[i].game_player = game_player;
+                    let player = null;
+                    for(let i = 0;i<arrayPlayers.length;i++){
+                    if(arrayPlayers[i].player_id == game_player){
+                player = arrayPlayers[i];
+                    }
+                    }
+                    arrayGames[i].game_player = player;
                     openGameSessions();
                     return;
                 }
@@ -561,8 +567,7 @@ function addSession() {
                 player = arrayPlayers[i];
             }
         }
-
-        arrayGames.push(new GameSession(new Date(game_sDate), game_desc, player));
+        arrayGames.push(new GameSession(new Date(game_sDate), game_desc, player ));
         openGameSessions();
         return;
     }
@@ -592,7 +597,7 @@ function playerList(){
     arrayPlayers.forEach(function(player, index){
         var option = document.createElement("option");
         option.innerHTML = player.player_id + " - " + player.player_name;
-        option.value = player;
+        option.value = player.player_id;
         fragment.appendChild(option);
     });
 
