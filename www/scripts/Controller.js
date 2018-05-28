@@ -298,6 +298,8 @@ function openCreatePlayer() {
     }
         document.getElementById("playersButtons").style.display = "none";
         document.getElementById("addPlayers").style.display = "block";
+        document.getElementById("addB").style.display = "inline";
+        document.getElementById("editB").style.display = "none";
     if(selectedPlayerID == void 0){
         document.getElementById("player_name").value = "";
         document.getElementById("player_bday").value = "";
@@ -355,7 +357,15 @@ if(selectedPlayerID != void 0){
         }
     }
     auxPlayerID = selectedPlayerID;
-    openCreatePlayer();
+    
+    if(arrayPlayers.length != 0){
+        document.getElementById("playersTable").style.display = "none";
+    }
+        document.getElementById("playersButtons").style.display = "none";
+        document.getElementById("addPlayers").style.display = "block";
+        document.getElementById("editB").style.display = "inline";
+        document.getElementById("addB").style.display = "none";
+    resetSelecteds();
     }else{
         alert("Please select a Player!")
     }
@@ -440,12 +450,13 @@ function selectPlayer(id, tr) {
 /**
  * Creates or edits a player
  */
-function addPlayer() {
+function addPlayer(command) {
     var player_name = document.getElementById("player_name").value;
     var player_bday = document.getElementById("player_bday").value;
     var player_country = document.getElementById("player_country").value;
 
-
+switch(command){
+    case "Edit":
 if(auxPlayerID != void 0){
     for(let i= 0; i<arrayPlayers.length;i++){
         console.log(auxPlayerID);
@@ -470,7 +481,9 @@ if(auxPlayerID != void 0){
             }
         }
     }
-}else if(player_name == "" 
+}
+case "Add":
+ if(player_name == "" 
         || player_bday.split("/")[0] == "dd"
         || player_bday.split("/")[1] == "mm"
         || player_bday.split("/")[2] == "yyyy") {
@@ -482,6 +495,8 @@ if(auxPlayerID != void 0){
         openPlayers();
         return;
     }
+
+}
 }
 
 function removePlayer(){
