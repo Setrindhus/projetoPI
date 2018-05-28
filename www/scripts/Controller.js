@@ -293,12 +293,11 @@ function openStats() {
 
 function openCreatePlayer() {
     //openPlayers();
-    console.log(selectedPlayerID);
     if(arrayPlayers.length != 0){
-    document.getElementById("playersTable").style.display = "none";
+        document.getElementById("playersTable").style.display = "none";
     }
-    document.getElementById("playersButtons").style.display = "none";
-    document.getElementById("addPlayers").style.display = "block";
+        document.getElementById("playersButtons").style.display = "none";
+        document.getElementById("addPlayers").style.display = "block";
     if(selectedPlayerID == void 0){
         document.getElementById("player_name").value = "";
         document.getElementById("player_bday").value = "";
@@ -306,7 +305,6 @@ function openCreatePlayer() {
         selectElement("player_country","AR");
     }
     resetSelecteds();
-    console.log(selectedPlayerID);
 }
 
 function selectElement(id, valueToSelect)
@@ -357,7 +355,7 @@ if(selectedPlayerID != void 0){
         }
     }
     auxPlayerID = selectedPlayerID;
-        openCreatePlayer();
+    openCreatePlayer();
     }else{
         alert("Please select a Player!")
     }
