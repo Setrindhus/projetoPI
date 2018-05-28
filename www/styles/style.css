@@ -1,7 +1,9 @@
 body{
     text-align: center;
-    background-image: url("../images/wallpaper.jpg");
+    background-image: url("../images/wallpaper_2.jpg");
     background-attachment: fixed;
+    background-position: center;
+    background-size: 100%;
 }
 
 #wrapper {
@@ -11,12 +13,21 @@ body{
     width: 70%;
     margin-left: 15%;
     margin-right: 15%;
-    background: rgba(255, 255, 255,0.5);
-    box-shadow: 0px 0px 20px black;
+    background: rgba(255, 255, 255,0.7);
+    box-shadow: 2px 2px 20px black, 0px 0px 10px white;
 }
 
 article {
     display: none;
+}
+
+#pookieImage img{
+    margin-top: 10px;
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+    border-radius: 7px;
+    box-shadow: 0px 0px 15px black;
 }
 
 #home {
@@ -74,7 +85,7 @@ table {
 }
 
 tr:nth-child(even){
-    background: rgb(211, 211, 211);
+    background: rgb(150, 150, 150,0.5);
 }
 
 td {
@@ -97,7 +108,7 @@ th:last-child{
 }
 
 tr {
-    border-bottom: solid 1px rgb(150, 150, 150);
+    border-bottom: solid 1px rgba(150, 150, 150);
 }
 
 tr:hover {

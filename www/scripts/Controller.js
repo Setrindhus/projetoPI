@@ -92,9 +92,9 @@ function eraseTablesHighlights() {
             let tr = table.childNodes[j];
             tr.style.color = "black";
             if(j%2 === 0){
-                tr.style.backgroundColor = "white";
+                tr.style.backgroundColor = "rgba(255,255,255,0)";
             } else {
-                tr.style.backgroundColor = 'rgb(211, 211, 211)';
+                tr.style.backgroundColor = 'rgba(150, 150, 150,0.5)';
             }
         } 
     }
