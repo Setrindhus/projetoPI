@@ -1,4 +1,4 @@
-var http = require("http");
+/*var http = require("http");
 var url = require("url");
 var querystring = require("querystring");
 var path = require("path");
@@ -67,3 +67,21 @@ http.createServer(function (request, response) {
     }
 }).listen(options.default.port);
 logOnDev("Server running at http://localhost:${options.default.port}/");
+*/
+
+const express = require("express");
+const requestHandlers = require("./scripts/request-handlers");
+const bodyParser = require("body-parser");
+const app = express();
+
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
+app.use(express.static("www"));
+
+
+app.get("/getPlayers", requestHandlers.getPlayers);
+app.post("/insertPlayer", requestHandlers.insertPlayer);
+app.delete("/deletePlayer", requestHandlers.deletePlayer);
+app.patch("/updatePlayer", requestHandlers.updatePlayer);          
+
+app.listen(8081);
