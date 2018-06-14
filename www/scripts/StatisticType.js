@@ -1,7 +1,13 @@
-var statType_id_count = 1;
+//var statType_id_count = 1;
 
-function StatisticType(name, desc){
+/*function StatisticType(name, desc){
     this.statType_id = statType_id_count++;
+    this.statType_name = name;
+    this.statType_desc = desc;
+}*/
+
+function StatisticType(name, desc, statType_id){
+    this.statType_id = statType_id;
     this.statType_name = name;
     this.statType_desc = desc;
 }

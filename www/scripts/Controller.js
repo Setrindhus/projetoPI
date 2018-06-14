@@ -1,4 +1,5 @@
 
+
 var arrayPlayers = [];
 var arrayGames = [];
 var arrayStatsTypes = [];
@@ -6,6 +7,9 @@ var arrayStats = [];
 
 function getData(){
     getPlayersBD();
+    getGameSessionsBD();
+    getStatisticTypeBD();
+    getStatisticBD();
 }
 
 /*var p1 = new Player("João", new Date("2008-08-08"), "PT");
@@ -529,16 +533,17 @@ function removePlayer(){
             deletePlayerBD(selectedPlayerID);
         }
     });
-    //Não é necessario pq esta ON DELETE CASCADE?
-    /*for(let i = 0; i<arrayGames.length;i++){
+   
+    for(let i = 0; i<arrayGames.length;i++){
         console.log("a "+selectedPlayerID);
+        console.log("aa" + arrayGames[0].game_player.player_id);
         if(selectedPlayerID == arrayGames[i].game_player.player_id){
             console.log("b "+ selectedPlayerID);
             
             arrayGames.splice(i,1);
             i -= 1;
         }
-    }*/
+    }
     clearPlayerListOptions();
 
     openPlayers();
@@ -583,10 +588,11 @@ function addSession(command) {
                     let player = null;
                     for(let i = 0;i<arrayPlayers.length;i++){
                     if(arrayPlayers[i].player_id == game_player){
-                player = arrayPlayers[i];
+                    player = arrayPlayers[i];
                     }
                     }
                     arrayGames[i].game_player = player;
+                    updateGameSessionBD(game_sDate, game_desc, player.player_id,arrayGames[i].game_id);
                     openGameSessions();
                     return;
                 }
@@ -610,6 +616,7 @@ function addSession(command) {
             }
         }
         arrayGames.push(new GameSession(new Date(game_sDate), game_desc, player ));
+        insertGameBD(game_sDate, game_desc, player.player_id);
         openGameSessions();
         return;
     }
@@ -622,6 +629,7 @@ function removeSession(){
         console.log("ee" + selectedGameSessionID);
         if(selectedGameSessionID == game.game_id){
             arrayGames.splice(index,1);
+            deleteGameSessionBD(selectedGameSessionID);
         }
     });
     console.log(arrayGames.length);
@@ -741,7 +749,9 @@ function createTable(array) {
                     console.log(object[property]);
                     td.textContent = calculateAge(object[property]); //adiciona a idade a celula
                 } else if (property.includes("_sDate")) {
-                    td.textContent = object[property].toISOString().split("T")[0];
+                    console.log("O " + object[property]);
+                    var dateF = new Date(object[property]);
+                    td.textContent = dateF.toISOString().split("T")[0];
                 } else {
                     td.textContent = object[property]; //adiciona o valor a uma celula
                 }
@@ -843,6 +853,47 @@ function playerExists(player) {
     }
     return false;
 }
+
+function sessionExists(game) {
+    for (let i = 0; i < arrayGames.length; i++) {
+        if (arrayGames[i].game_id === game.game_id)
+            return true;
+    }
+    return false;
+}
+
+function statTypeExists(statType) {
+    for (let i = 0; i < arrayStatsTypes.length; i++) {
+        if (arrayStatsTypes[i].statType_id === statType.statType_id)
+            return true;
+    }
+    return false;
+}
+
+function statsExists(stats) {
+    for (let i = 0; i < arrayStats.length; i++) {
+        if (arrayStats[i].stat_id === stats.stat_id)
+            return true;
+    }
+    return false;
+}
+
+function searchPlayerByID(id){
+    for(let i = 0; i < arrayPlayers.length; i++){
+        if(id == arrayPlayers[i].player_id){
+            return arrayPlayers[i];
+        }
+    }
+}
+
+
+function searchStatisticTypeByID(id){
+    for(let i = 0; i < arrayStatsTypes.length; i++){
+        if(id == arrayStatsTypes[i].statType_id){
+            return arrayStatsTypes[i];
+        }
+    }
+}
 // AJAX FUNCTIONS
 
 //Players
@@ -855,7 +906,7 @@ function getPlayersBD() {
             var response = JSON.parse(xhr.responseText);
             console.log(response);
             response.forEach(function (j) {
-                var player = new Player(j.player_Name, j.player_Bday, j.player_Country);
+                var player = new Player(j.player_Name, j.player_Bday, j.player_Country, j.player_ID);
                 if (arrayPlayers.lenght != 0) {
                     if (!playerExists(player)) {
                         console.log(player.player_name + "-" + player.player_id);
@@ -907,4 +958,119 @@ function updatePlayerBD(player_name, player_bday, player_country, player_id) {
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send(JSON.stringify(obj));
 
+}
+
+//GameSessions
+
+
+
+function getGameSessionsBD() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/getGameSessions", true);
+    xhr.onreadystatechange = function () {
+        if ((this.readyState === 4) && (this.status === 200)) {
+            var response = JSON.parse(xhr.responseText);
+            console.log(response);
+            response.forEach(function (j) {
+                var player = searchPlayerByID(j.game_Player_ID);
+                var game = new GameSession(j.game_SDate, j.game_Desc, player, j.game_ID);
+                if (arrayPlayers.lenght != 0) {
+                    if (!sessionExists(game)) {
+                        //console.log(player.player_name + "-" + player.player_id);
+                        arrayGames.push(game);
+                    }
+                } else
+                    arrayGames.push(game);
+            })       
+        }
+    }
+    xhr.send();
+}
+
+function insertGameBD(game_sdate, game_desc, game_player_id) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/insertGameSession");
+    var obj = {
+        game_sdate: game_sdate,
+        game_desc: game_desc,
+        game_player_id: game_player_id
+    }
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(obj));
+}
+
+
+function deleteGameSessionBD(game_id) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("DELETE", "/deleteGameSession");
+    var obj = {
+        game_id: game_id
+    }
+
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(obj));
+
+}
+
+
+function updateGameSessionBD(game_sdate, game_desc, game_player_id, game_id) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("PATCH", "/updateGameSession");
+    var obj = {
+        game_sdate: game_sdate,
+        game_desc: game_desc,
+        game_player_id: game_player_id,
+        game_id: game_id
+    }
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(obj));
+
+}
+
+// StatisticType
+
+function getStatisticTypeBD() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/getStatisticTypes", true);
+    xhr.onreadystatechange = function () {
+        if ((this.readyState === 4) && (this.status === 200)) {
+            var response = JSON.parse(xhr.responseText);
+            console.log(response);
+            response.forEach(function (j) {
+                var statisticType = new StatisticType(j.statType_Name, j.statType_Desc, j.statType_ID);
+                if (arrayStatsTypes.lenght != 0) {
+                    if (!statTypeExists(statisticType)) {
+                        arrayStatsTypes.push(statisticType);
+                    }
+                } else
+                    arrayStatsTypes.push(statisticType);
+            })       
+        }
+    }
+    xhr.send();
+}
+
+
+//Statistic
+
+function getStatisticBD() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/getStatistics", true);
+    xhr.onreadystatechange = function () {
+        if ((this.readyState === 4) && (this.status === 200)) {
+            var response = JSON.parse(xhr.responseText);
+            console.log(response);
+            response.forEach(function (j) {
+                var statisticType = searchStatisticTypeByID(j.stat_StatType_ID);
+                var statistic = new Statistic(j.stat_Value, statisticType, j.stat_Game_ID, j.stat_ID);
+                if (arrayStats.lenght != 0) {
+                    if (!statsExists(statistic)) {
+                        arrayStats.push(statistic);
+                    }
+                } else
+                    arrayStats.push(statistic);
+            })       
+        }
+    }
+    xhr.send();
 }

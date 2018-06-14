@@ -1,7 +1,14 @@
-var stat_id_count = 1;
+//var stat_id_count = 1;
 
-function Statistic(value, type, game){
+/*function Statistic(value, type, game){
     this.stat_id = stat_id_count++;
+    this.stat_value = value;
+    this.stat_type = type;
+    this.stat_game = game;
+}*/
+
+function Statistic(value, type, game, stat_id){
+    this.stat_id = stat_id;
     this.stat_value = value;
     this.stat_type = type;
     this.stat_game = game;

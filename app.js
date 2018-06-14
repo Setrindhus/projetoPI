@@ -82,6 +82,15 @@ app.use(express.static("www"));
 app.get("/getPlayers", requestHandlers.getPlayers);
 app.post("/insertPlayer", requestHandlers.insertPlayer);
 app.delete("/deletePlayer", requestHandlers.deletePlayer);
-app.patch("/updatePlayer", requestHandlers.updatePlayer);          
+app.patch("/updatePlayer", requestHandlers.updatePlayer);
+
+app.get("/getGameSessions", requestHandlers.getGameSessions);
+app.post("/insertGameSession", requestHandlers.insertGameSession);
+app.delete("/deleteGameSession", requestHandlers.deleteGameSession);
+app.patch("/updateGameSession", requestHandlers.updateGameSession); 
+
+app.get("/getStatisticTypes", requestHandlers.getStatisticTypes);
+
+app.get("/getStatistics", requestHandlers.getStatistics);
 
 app.listen(8081);
