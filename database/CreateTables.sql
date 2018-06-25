@@ -38,8 +38,10 @@ stat_Value float(10) not null,
 stat_Game_ID int not null,
 stat_StatType_ID int not null,
 primary key(stat_ID),
-foreign key(stat_Game_ID) references gameSession(game_ID),
+foreign key(stat_Game_ID) references gameSession(game_ID) 
+ON DELETE CASCADE,
 foreign key(stat_StatType_ID) references statisticType(statType_ID));
+
 
 
 
