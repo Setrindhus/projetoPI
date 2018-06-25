@@ -934,6 +934,7 @@ function insertPlayerBD(player_name, player_bday, player_country) {
 
 
 function deletePlayerBD(player_id) {
+    console.log("ola");
     var xhr = new XMLHttpRequest();
     xhr.open("DELETE", "/deletePlayer");
     var obj = {

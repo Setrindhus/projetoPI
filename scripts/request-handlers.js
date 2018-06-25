@@ -59,7 +59,6 @@ function insertPlayer(req, res) {
 
 function deletePlayer(req, res) {
     var id = Number.parseInt(req.body.player_id);
-
     execute(res, "DELETE FROM player where player_ID = ?", [id]);
 }
 
