@@ -5,7 +5,10 @@ var arrayGames = [];
 var arrayStatsTypes = [];
 var arrayStats = [];
 
-function getData(){
+/**
+ * Chama as funções para buscar os dados a base de dados
+ */
+function getData() {
     getPlayersBD();
     getGameSessionsBD();
     getStatisticTypeBD();
@@ -87,7 +90,7 @@ function eraseTabsHighlights() {
 }
 
 function highlightSelectedTableRow(tr) {
-    if(active_tab === "gameSessions"){
+    if (active_tab === "gameSessions") {
         tr.style.backgroundColor = 'rgb(36, 36, 144)';
     } else {
         tr.style.backgroundColor = 'rgb(134, 26, 26)';
@@ -103,12 +106,12 @@ function eraseTablesHighlights() {
         for (let j = 1; j < table.childNodes.length; j++) {
             let tr = table.childNodes[j];
             tr.style.color = "black";
-            if(j%2 === 0){
+            if (j % 2 === 0) {
                 tr.style.backgroundColor = "rgba(255,255,255,0)";
             } else {
                 tr.style.backgroundColor = 'rgba(150, 150, 150,0.5)';
             }
-        } 
+        }
     }
 }
 
@@ -132,8 +135,6 @@ function closeTabs() {
 function resetSelecteds() {
     selectedGameSessionID = void 0;
     selectedPlayerID = void 0;
-    //auxPlayerID = void 0;
-    //auxSessionID = void 0;
 }
 
 /**
@@ -234,7 +235,7 @@ function playerTotalStats(id) {
  * @param {Date} birthday 
  */
 function calculateAge(birthday) { // birthday is a date
-    
+
     var bDate = new Date(birthday);
     var ageDifMs = Date.now() - bDate.getTime();
     var ageDate = new Date(ageDifMs); // miliseconds from epoch
@@ -261,6 +262,9 @@ function openHome() {
     highlightSelectedTab();
 }
 
+/**
+ * Abre os separadoroes relacionados com os Players e fecha os restantes
+ */
 function openPlayers() {
     closeTabs();
     document.getElementById("players").style.display = "block";
@@ -279,6 +283,9 @@ function openPlayers() {
     resetSelecteds();
 }
 
+/**
+ * Abre os separadoroes relacionados com as Game Sessions e fecha os restantes
+ */
 function openGameSessions() {
     closeTabs();
     document.getElementById("gameSessions").style.display = "block";
@@ -294,6 +301,9 @@ function openGameSessions() {
     document.getElementById("game_desc").value = "";
 }
 
+/**
+ * Abre os separadoroes relacionados com as Estatisticas e fecha os restantes
+ */
 function openStats() {
     closeTabs();
     document.getElementById("stats").firstElementChild.firstElementChild.textContent = "STATS";
@@ -305,43 +315,48 @@ function openStats() {
     highlightSelectedTab();
 }
 
+/**
+ * Abre os separadoroes relacionados com a criacao de Players e fecha os restantes
+ */
 function openCreatePlayer() {
     //openPlayers();
-    if(arrayPlayers.length != 0){
+    if (arrayPlayers.length != 0) {
         document.getElementById("playersTable").style.display = "none";
     }
-        document.getElementById("playersButtons").style.display = "none";
-        document.getElementById("addPlayers").style.display = "block";
-        document.getElementById("addB").style.display = "inline";
-        document.getElementById("editB").style.display = "none";
-    if(selectedPlayerID == void 0){
+    document.getElementById("playersButtons").style.display = "none";
+    document.getElementById("addPlayers").style.display = "block";
+    document.getElementById("addB").style.display = "inline";
+    document.getElementById("editB").style.display = "none";
+    if (selectedPlayerID == void 0) {
         document.getElementById("player_name").value = "";
         document.getElementById("player_bday").value = "";
         //document.getElementById("player_country").value = arrayPl;
-        selectElement("player_country","AR");
+        selectElement("player_country", "AR");
     }
     resetSelecteds();
 }
 
-function selectElement(id, valueToSelect)
-{    
+function selectElement(id, valueToSelect) {
     var element = document.getElementById(id);
     element.value = valueToSelect;
 }
 
+/**
+ * Abre os separadoroes relacionados com a criação de Game Sessions e fecha os restantes
+ */
 function openCreateSession() {
     clearPlayerListOptions();
     playerList();
     //openGameSessions();
-    if(arrayGames.length != 0){
-    document.getElementById("gamesTable").style.display = "none";
+    if (arrayGames.length != 0) {
+        document.getElementById("gamesTable").style.display = "none";
     }
     document.getElementById("sessionsButtons").style.display = "none";
     document.getElementById("addGameSessions").style.display = "block";
     document.getElementById("addBS").style.display = "inline";
     document.getElementById("editBS").style.display = "none";
 
-    if(selectedGameSessionID == void 0){
+    if (selectedGameSessionID == void 0) {
         document.getElementById("game_desc").value = "";
         document.getElementById("game_sDate").value = "";
         document.getElementById("playerList").value = "";
@@ -355,44 +370,51 @@ function openCreateSession() {
     resetSelecteds();
 }
 
-function openPlayerStats(){
+/**
+ * Abre os separadoroes relacionados com as estatisticas dos Players e fecha os restantes
+ */
+function openPlayerStats() {
     openStats();
     document.getElementById("leaderboard").style.display = "none";
     document.getElementById("chartContainer").style.display = "block";
 }
 
+/**
+ * Abre os separadoroes relacionados com a edição de Players e fecha os restantes
+ */
 function openEditPlayer() {
-
-if(selectedPlayerID != void 0){
-    for(let i=0; i<arrayPlayers.length;i++){
-        if(selectedPlayerID == arrayPlayers[i].player_id){
-            document.getElementById("player_name").value = arrayPlayers[i].player_name;
-            document.getElementById("player_bday").value = formatDate(arrayPlayers[i].player_bday);
-            document.getElementById("player_country").value = arrayPlayers[i].player_country;
-            break;
+    if (selectedPlayerID != void 0) {
+        for (let i = 0; i < arrayPlayers.length; i++) {
+            if (selectedPlayerID == arrayPlayers[i].player_id) {
+                document.getElementById("player_name").value = arrayPlayers[i].player_name;
+                document.getElementById("player_bday").value = formatDate(arrayPlayers[i].player_bday);
+                document.getElementById("player_country").value = arrayPlayers[i].player_country;
+                break;
+            }
         }
-    }
-    auxPlayerID = selectedPlayerID;
-    
-    if(arrayPlayers.length != 0){
-        document.getElementById("playersTable").style.display = "none";
-    }
+        auxPlayerID = selectedPlayerID;
+
+        if (arrayPlayers.length != 0) {
+            document.getElementById("playersTable").style.display = "none";
+        }
         document.getElementById("playersButtons").style.display = "none";
         document.getElementById("addPlayers").style.display = "block";
         document.getElementById("editB").style.display = "inline";
         document.getElementById("addB").style.display = "none";
-    resetSelecteds();
-    }else{
+        resetSelecteds();
+    } else {
         alert("Please select a Player!")
     }
 }
 
+/**
+ * Abre os separadoroes relacionados com a edição de Game Sessions e fecha os restantes
+ */
 function openEditSession() {
-
-    if(selectedGameSessionID != void 0){
+    if (selectedGameSessionID != void 0) {
         playerList(); //Cria as opções no form
-        for(let i=0; i<arrayGames.length;i++){
-            if(selectedGameSessionID == arrayGames[i].game_id){
+        for (let i = 0; i < arrayGames.length; i++) {
+            if (selectedGameSessionID == arrayGames[i].game_id) {
                 document.getElementById("game_desc").value = arrayGames[i].game_desc;
                 document.getElementById("game_sDate").value = formatDate(arrayGames[i].game_sDate);
                 document.getElementById("playerList").value = arrayGames[i].game_player.player_id;
@@ -407,12 +429,17 @@ function openEditSession() {
 
         document.getElementById("addBS").style.display = "none";
         document.getElementById("editBS").style.display = "inline";
-        }else{
-            alert("Please select a Player!")
-        }
+    } else {
+        alert("Please select a Player!")
     }
+}
 
-function formatDate(date){
+/**
+ * Formata a string para uma Date, caso o dia ou mes seja meno que 10 adiciona um 0 antes do caracter
+ * @param {*} date string no formato yyyy-mm-dd 
+ * @return {string} string da data no formato yyyy-mm-dd
+ */
+function formatDate(date) {
     /*var b = date.toString();
     var year = b.slice(0,4);
     var month = b.slice(5,2);
@@ -420,22 +447,25 @@ function formatDate(date){
     var bDate = new Date(date);
 
     var dd = bDate.getDate();
-    var mm = bDate.getMonth()+1; 
+    var mm = bDate.getMonth() + 1;
     var yyyy = bDate.getFullYear();
-    
-    if(dd<10) {
-        dd = '0'+dd
-    } 
-    
-    if(mm<10) {
-        mm = '0'+mm
-    } 
-    
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
     return today = yyyy + '-' + mm + '-' + dd;
 }
 
-function cancel(open){
-    
+/**
+ * Volta a "página" anterior
+ * @param {*} open nome da função
+ */
+function cancel(open) {
 
     //Player Form
     document.getElementById("player_name").value = "";
@@ -471,85 +501,77 @@ function selectPlayer(id, tr) {
 }
 
 /**
- * Creates or edits a player
+ * Cria ou edita um player dependendo do command
+ * @param {*} command "Add" para adicionar "Edit" para editar
  */
 function addPlayer(command) {
     var player_name = document.getElementById("player_name").value;
     var player_bday = document.getElementById("player_bday").value;
     var player_country = document.getElementById("player_country").value;
 
-switch(command){
-    case "Edit":
-if(auxPlayerID != void 0){
-    for(let i= 0; i<arrayPlayers.length;i++){
-        console.log(auxPlayerID);
-        console.log(arrayPlayers[i].player_id);
-        if(auxPlayerID == arrayPlayers[i].player_id){
-            if(player_name == "" 
+    switch (command) {
+        case "Edit":
+            if (auxPlayerID != void 0) {
+                for (let i = 0; i < arrayPlayers.length; i++) {
+                    if (auxPlayerID == arrayPlayers[i].player_id) {
+                        if (player_name == ""
+                            || player_bday.split("/")[0] == "dd"
+                            || player_bday.split("/")[1] == "mm"
+                            || player_bday.split("/")[2] == "yyyy"
+                            || player_country == "") {
+                            alert("Insert valid values!");
+                            return;
+                        } else {
+                            arrayPlayers[i].player_name = player_name;
+                            arrayPlayers[i].player_bday = new Date(player_bday);
+                            arrayPlayers[i].player_country = player_country;
+                            updatePlayerBD(player_name, player_bday, player_country, auxPlayerID);
+                            openPlayers();
+                            return;
+                        }
+                    }
+                }
+            }
+        case "Add":
+            if (player_name == ""
                 || player_bday.split("/")[0] == "dd"
                 || player_bday.split("/")[1] == "mm"
-                || player_bday.split("/")[2] == "yyyy"
-                || player_country == "") {
+                || player_bday.split("/")[2] == "yyyy") {
                 alert("Insert valid values!");
                 return;
-            }else{
-                console.log("a"+player_bday);
-                
-                arrayPlayers[i].player_name = player_name;
-                arrayPlayers[i].player_bday = new Date(player_bday);
-                arrayPlayers[i].player_country = player_country;
-                console.log(arrayPlayers[i]);
-                updatePlayerBD(player_name,player_bday,player_country,auxPlayerID);
+            } else {
+                arrayPlayers.push(new Player(player_name, new Date(player_bday), player_country));
+                insertPlayerBD(player_name, player_bday, player_country);
                 openPlayers();
                 return;
             }
-        }
+
     }
 }
-case "Add":
- if(player_name == "" 
-        || player_bday.split("/")[0] == "dd"
-        || player_bday.split("/")[1] == "mm"
-        || player_bday.split("/")[2] == "yyyy") {
-        alert("Insert valid values!");
-        return;
-    } else {
-        console.log("b");
-        console.log("date " + player_bday);
-        arrayPlayers.push(new Player(player_name, new Date(player_bday), player_country));
-        insertPlayerBD(player_name, player_bday, player_country);
+
+/**
+ * Remove o player e todas as game sessions que lhe estão associadas
+ */
+function removePlayer() {
+    if (selectedPlayerID != void 0) {
+        arrayPlayers.forEach(function (player, index) {
+            if (selectedPlayerID == player.player_id) {
+                arrayPlayers.splice(index, 1);
+                deletePlayerBD(selectedPlayerID);
+            }
+        });
+
+        for (let i = 0; i < arrayGames.length; i++) {
+            if (selectedPlayerID == arrayGames[i].game_player.player_id) {
+                arrayGames.splice(i, 1);
+                i -= 1;
+            }
+        }
+        clearPlayerListOptions();
         openPlayers();
-        return;
+    } else {
+        alert("Choose the player you want to remove!");
     }
-
-}
-}
-
-function removePlayer(){
-    if(selectedPlayerID != void 0){
-    arrayPlayers.forEach(function(player,index){
-        if(selectedPlayerID == player.player_id){
-            arrayPlayers.splice(index,1);
-            deletePlayerBD(selectedPlayerID);
-        }
-    });
-   
-    for(let i = 0; i<arrayGames.length;i++){
-        console.log("a "+selectedPlayerID);
-        console.log("aa" + arrayGames[0].game_player.player_id);
-        if(selectedPlayerID == arrayGames[i].game_player.player_id){
-            console.log("b "+ selectedPlayerID);
-            
-            arrayGames.splice(i,1);
-            i -= 1;
-        }
-    }
-    clearPlayerListOptions();
-
-    openPlayers();
-}else{
-    alert("Choose the player you want to remove!");
-}
 }
 
 
@@ -566,86 +588,92 @@ function selectGameSession(id, tr) {
     highlightSelectedTableRow(tr);
 }
 
+/**
+ * Cria ou edita uma game session dependendo do command
+ * @param {*} command "Add" para adicionar "Edit" para editar
+ */
 function addSession(command) {
     var game_sDate = document.getElementById("game_sDate").value;
     var game_desc = document.getElementById("game_desc").value;
     var game_player = document.getElementById("playerList").value;
 
-    switch(command){
+    switch (command) {
         case "Edit":
-    if(auxSessionID != void 0){
-        for(let i= 0; i<arrayGames.length;i++){
-            if(auxSessionID == arrayGames[i].game_id){
-                if(game_sDate.split("/")[0] == "dd"
-                    || game_sDate.split("/")[1] == "mm"
-                    || game_sDate.split("/")[2] == "yyyy"
-                    || game_desc == "") {
-                    alert("Insert valid values!");
-                    return;
-                }else{
-                    arrayGames[i].game_desc = game_desc;
-                    arrayGames[i].game_sDate = new Date(game_sDate);
-                    let player = null;
-                    for(let i = 0;i<arrayPlayers.length;i++){
-                    if(arrayPlayers[i].player_id == game_player){
-                    player = arrayPlayers[i];
+            if (auxSessionID != void 0) {
+                for (let i = 0; i < arrayGames.length; i++) {
+                    if (auxSessionID == arrayGames[i].game_id) {
+                        if (game_sDate.split("/")[0] == "dd"
+                            || game_sDate.split("/")[1] == "mm"
+                            || game_sDate.split("/")[2] == "yyyy"
+                            || game_desc == "") {
+                            alert("Insert valid values!");
+                            return;
+                        } else {
+                            arrayGames[i].game_desc = game_desc;
+                            arrayGames[i].game_sDate = new Date(game_sDate);
+                            let player = null;
+                            for (let i = 0; i < arrayPlayers.length; i++) {
+                                if (arrayPlayers[i].player_id == game_player) {
+                                    player = arrayPlayers[i];
+                                }
+                            }
+                            arrayGames[i].game_player = player;
+                            updateGameSessionBD(game_sDate, game_desc, player.player_id, arrayGames[i].game_id);
+                            openGameSessions();
+                            return;
+                        }
                     }
-                    }
-                    arrayGames[i].game_player = player;
-                    updateGameSessionBD(game_sDate, game_desc, player.player_id,arrayGames[i].game_id);
-                    openGameSessions();
-                    return;
                 }
             }
-        }
-    }
-    case "Add":
-    if (game_sDate.split("/")[0] == "dd"
-        || game_sDate.split("/")[1] == "mm"
-        || game_sDate.split("/")[2] == "yyyy"
-        || game_desc == ""
-        || game_player == "") {
-        alert("Insert valid values!");
-        return;
-    } else {
-        console.log(game_player);
-        let player = null;
-        for(let i = 0;i<arrayPlayers.length;i++){
-            if(arrayPlayers[i].player_id == game_player){
-                player = arrayPlayers[i];
+        case "Add":
+            if (game_sDate.split("/")[0] == "dd"
+                || game_sDate.split("/")[1] == "mm"
+                || game_sDate.split("/")[2] == "yyyy"
+                || game_desc == ""
+                || game_player == "") {
+                alert("Insert valid values!");
+                return;
+            } else {
+                let player = null;
+                for (let i = 0; i < arrayPlayers.length; i++) {
+                    if (arrayPlayers[i].player_id == game_player) {
+                        player = arrayPlayers[i];
+                    }
+                }
+                arrayGames.push(new GameSession(new Date(game_sDate), game_desc, player));
+                insertGameBD(game_sDate, game_desc, player.player_id);
+                openGameSessions();
+                return;
             }
-        }
-        arrayGames.push(new GameSession(new Date(game_sDate), game_desc, player ));
-        insertGameBD(game_sDate, game_desc, player.player_id);
-        openGameSessions();
-        return;
     }
 }
+
+/**
+ * Remove uma game session
+ */
+function removeSession() {
+    if (selectedGameSessionID != void 0) {
+        arrayGames.forEach(function (game, index) {
+            if (selectedGameSessionID == game.game_id) {
+                arrayGames.splice(index, 1);
+                deleteGameSessionBD(selectedGameSessionID);
+            }
+        });
+        openGameSessions();
+    } else {
+        alert("Choose the game session you want to remove!");
+    }
 }
 
-function removeSession(){
-    if(selectedGameSessionID != void 0){
-    arrayGames.forEach(function(game,index){
-        console.log("ee" + selectedGameSessionID);
-        if(selectedGameSessionID == game.game_id){
-            arrayGames.splice(index,1);
-            deleteGameSessionBD(selectedGameSessionID);
-        }
-    });
-    console.log(arrayGames.length);
-    openGameSessions();
-}else{
-    alert("Choose the game session you want to remove!");
-}
-}
-
-
-function playerList(){
+/**
+ * Cria um fragment com a lista de jogadores e insere numa tag select
+ */
+function playerList() {
     var select = document.getElementById("playerList");
     select.innerHTML = '';
     var fragment = document.createDocumentFragment();
 
-    arrayPlayers.forEach(function(player, index){
+    arrayPlayers.forEach(function (player, index) {
         var option = document.createElement("option");
         option.innerHTML = player.player_id + " - " + player.player_name;
         option.value = player.player_id;
@@ -655,10 +683,12 @@ function playerList(){
     select.appendChild(fragment);
 }
 
-function clearPlayerListOptions()
-{
+/**
+ * Limpa a lista de players
+ */
+function clearPlayerListOptions() {
     var select = document.getElementById("playerList");
-    for (var i = select.options.length - 1 ; i >= 0 ; i--)
+    for (var i = select.options.length - 1; i >= 0; i--)
         select.remove(i);
 }
 
@@ -666,21 +696,21 @@ function clearPlayerListOptions()
 
 function selectPlayerStats(id) {
     let player = void 0;
-    for(let i = 0; i<arrayPlayers.length ; i++){
-        if(arrayPlayers[i].player_id === id){
+    for (let i = 0; i < arrayPlayers.length; i++) {
+        if (arrayPlayers[i].player_id === id) {
             player = arrayPlayers[i];
         }
     }
     openPlayerStats();
 
-    playerColumnGraph(playerTotalStats(id),player);
+    playerColumnGraph(playerTotalStats(id), player);
 }
 
 function playerColumnGraph(array, player) {
     document.getElementById("stats").firstElementChild.firstElementChild.textContent = player.player_name.toUpperCase() + " STATS";
 
     let dataArray = [];
-    for(let i = 0; i<array.length; i++){
+    for (let i = 0; i < array.length; i++) {
         let data = {
             y: array[i].statTotalValue,
             label: array[i].statType
@@ -694,8 +724,8 @@ function playerColumnGraph(array, player) {
         axisY: {
             title: "Value"
         },
-        data: [{        
-            type: "column",  
+        data: [{
+            type: "column",
             /* showInLegend: true, 
             legendMarkerColor: "grey",
             legendText: "MMbbl = one million barrels", */
@@ -716,64 +746,62 @@ function createTable(array) {
     //Verifica qual a tabela
     deleteElement("playersTable");
     deleteElement("gamesTable");
-    if(array.length > 0){
-    if (array[0] instanceof Player) {
-        deleteElement("playersTable"); //Apaga a tabela para reconstruir
-        var table = document.createElement("table");
-        table.id = "playersTable"; //Adiciona ID a tabela
-        var parent = document.getElementById("players").firstElementChild; //Vai buscar o elemento pai
-    } else if (array[0] instanceof GameSession) {
-        deleteElement("gamesTable");
-        var table = document.createElement("table");
-        table.id = "gamesTable";
-        var parent = document.getElementById("gameSessions").firstElementChild;
-    } else {
-        deleteElement("leaderboard");
-        var table = document.createElement("table");
-        table.id = "leaderboard";
-        var parent = document.getElementById("stats").firstElementChild;
-    }
-
-    table.appendChild(tableHeader(array)); //Adiciona o cabecalho
-
-    //Cria a tabela
-    for (let index in array) {
-        let object = array[index];
-        let tr = document.createElement("tr");
-        for (let property in object) {
-
-            var td = document.createElement("td");
-            if (!(object[property] instanceof Function)) {
-
-                if (property.includes("_bday")) { //Se for a data de nascimento
-                    console.log(object[property]);
-                    td.textContent = calculateAge(object[property]); //adiciona a idade a celula
-                } else if (property.includes("_sDate")) {
-                    console.log("O " + object[property]);
-                    var dateF = new Date(object[property]);
-                    td.textContent = dateF.toISOString().split("T")[0];
-                } else {
-                    td.textContent = object[property]; //adiciona o valor a uma celula
-                }
-
-                tr.appendChild(td); //adiciona a celula a fila
-            }
-
-            if (array[0] instanceof Player) {
-                tr.onclick = function () { selectPlayer(tr.firstElementChild.textContent, tr) };
-            } else if (array[0] instanceof GameSession) {
-                tr.onclick = function () { selectGameSession(tr.firstElementChild.textContent, tr) };
-            } else if (property.includes("playerName")){
-                tr.onclick = function () { selectPlayerStats(object.playerName.player_id) };
-            }
-
-            table.appendChild(tr); //adiciona a fila a tabela
+    if (array.length > 0) {
+        if (array[0] instanceof Player) {
+            deleteElement("playersTable"); //Apaga a tabela para reconstruir
+            var table = document.createElement("table");
+            table.id = "playersTable"; //Adiciona ID a tabela
+            var parent = document.getElementById("players").firstElementChild; //Vai buscar o elemento pai
+        } else if (array[0] instanceof GameSession) {
+            deleteElement("gamesTable");
+            var table = document.createElement("table");
+            table.id = "gamesTable";
+            var parent = document.getElementById("gameSessions").firstElementChild;
+        } else {
+            deleteElement("leaderboard");
+            var table = document.createElement("table");
+            table.id = "leaderboard";
+            var parent = document.getElementById("stats").firstElementChild;
         }
 
-    }
+        table.appendChild(tableHeader(array)); //Adiciona o cabecalho
 
-    parent.appendChild(table); //adiciona a tabela ao elemento pai
-}
+        //Cria a tabela
+        for (let index in array) {
+            let object = array[index];
+            let tr = document.createElement("tr");
+            for (let property in object) {
+
+                var td = document.createElement("td");
+                if (!(object[property] instanceof Function)) {
+
+                    if (property.includes("_bday")) { //Se for a data de nascimento
+                        td.textContent = calculateAge(object[property]); //adiciona a idade a celula
+                    } else if (property.includes("_sDate")) {
+                        var dateF = new Date(object[property]);
+                        td.textContent = dateF.toISOString().split("T")[0];
+                    } else {
+                        td.textContent = object[property]; //adiciona o valor a uma celula
+                    }
+
+                    tr.appendChild(td); //adiciona a celula a fila
+                }
+
+                if (array[0] instanceof Player) {
+                    tr.onclick = function () { selectPlayer(tr.firstElementChild.textContent, tr) };
+                } else if (array[0] instanceof GameSession) {
+                    tr.onclick = function () { selectGameSession(tr.firstElementChild.textContent, tr) };
+                } else if (property.includes("playerName")) {
+                    tr.onclick = function () { selectPlayerStats(object.playerName.player_id) };
+                }
+
+                table.appendChild(tr); //adiciona a fila a tabela
+            }
+
+        }
+
+        parent.appendChild(table); //adiciona a tabela ao elemento pai
+    }
 }
 
 /**
@@ -846,7 +874,6 @@ function tableHeader(array) {
 }
 
 function playerExists(player) {
-    console.log("exists " +player.player_name + "-" + player.player_id);
     for (var i = 0; i < arrayPlayers.length; i++) {
         if (arrayPlayers[i].player_id === player.player_id)
             return true;
@@ -878,18 +905,18 @@ function statsExists(stats) {
     return false;
 }
 
-function searchPlayerByID(id){
-    for(let i = 0; i < arrayPlayers.length; i++){
-        if(id == arrayPlayers[i].player_id){
+function searchPlayerByID(id) {
+    for (let i = 0; i < arrayPlayers.length; i++) {
+        if (id == arrayPlayers[i].player_id) {
             return arrayPlayers[i];
         }
     }
 }
 
 
-function searchStatisticTypeByID(id){
-    for(let i = 0; i < arrayStatsTypes.length; i++){
-        if(id == arrayStatsTypes[i].statType_id){
+function searchStatisticTypeByID(id) {
+    for (let i = 0; i < arrayStatsTypes.length; i++) {
+        if (id == arrayStatsTypes[i].statType_id) {
             return arrayStatsTypes[i];
         }
     }
@@ -898,28 +925,35 @@ function searchStatisticTypeByID(id){
 
 //Players
 
+/**
+ * Busca os players à base de dados, cria os players e insere no Array
+ */
 function getPlayersBD() {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/getPlayers", true);
     xhr.onreadystatechange = function () {
         if ((this.readyState === 4) && (this.status === 200)) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response);
             response.forEach(function (j) {
                 var player = new Player(j.player_Name, j.player_Bday, j.player_Country, j.player_ID);
                 if (arrayPlayers.lenght != 0) {
                     if (!playerExists(player)) {
-                        console.log(player.player_name + "-" + player.player_id);
                         arrayPlayers.push(player);
                     }
                 } else
                     arrayPlayers.push(player);
-            })       
+            })
         }
     }
     xhr.send();
 }
 
+/**
+ * Insere um player à base de dados
+ * @param {*} player_name 
+ * @param {*} player_bday 
+ * @param {*} player_country 
+ */
 function insertPlayerBD(player_name, player_bday, player_country) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/insertPlayer");
@@ -932,9 +966,11 @@ function insertPlayerBD(player_name, player_bday, player_country) {
     xhr.send(JSON.stringify(obj));
 }
 
-
+/**
+ * Apaga um player da base de dados
+ * @param {*} player_id 
+ */
 function deletePlayerBD(player_id) {
-    console.log("ola");
     var xhr = new XMLHttpRequest();
     xhr.open("DELETE", "/deletePlayer");
     var obj = {
@@ -946,7 +982,13 @@ function deletePlayerBD(player_id) {
 
 }
 
-
+/**
+ * Edita um player na base de dados
+ * @param {*} player_name 
+ * @param {*} player_bday 
+ * @param {*} player_country 
+ * @param {*} player_id 
+ */
 function updatePlayerBD(player_name, player_bday, player_country, player_id) {
     var xhr = new XMLHttpRequest();
     xhr.open("PATCH", "/updatePlayer");
@@ -964,30 +1006,36 @@ function updatePlayerBD(player_name, player_bday, player_country, player_id) {
 //GameSessions
 
 
-
+/**
+ * Busca as game sessions à base de dados, cria as game sessions e insere no Array
+ */
 function getGameSessionsBD() {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/getGameSessions", true);
     xhr.onreadystatechange = function () {
         if ((this.readyState === 4) && (this.status === 200)) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response);
             response.forEach(function (j) {
                 var player = searchPlayerByID(j.game_Player_ID);
                 var game = new GameSession(j.game_SDate, j.game_Desc, player, j.game_ID);
                 if (arrayPlayers.lenght != 0) {
                     if (!sessionExists(game)) {
-                        //console.log(player.player_name + "-" + player.player_id);
                         arrayGames.push(game);
                     }
                 } else
                     arrayGames.push(game);
-            })       
+            })
         }
     }
     xhr.send();
 }
 
+/**
+ * Insere uma game session na base de dados
+ * @param {*} game_sdate 
+ * @param {*} game_desc 
+ * @param {*} game_player_id 
+ */
 function insertGameBD(game_sdate, game_desc, game_player_id) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/insertGameSession");
@@ -1000,7 +1048,10 @@ function insertGameBD(game_sdate, game_desc, game_player_id) {
     xhr.send(JSON.stringify(obj));
 }
 
-
+/**
+ * Apaga uma game session na base de dados
+ * @param {*} game_id 
+ */
 function deleteGameSessionBD(game_id) {
     var xhr = new XMLHttpRequest();
     xhr.open("DELETE", "/deleteGameSession");
@@ -1013,7 +1064,13 @@ function deleteGameSessionBD(game_id) {
 
 }
 
-
+/**
+ * Edita uma game session na base de dados
+ * @param {*} game_sdate 
+ * @param {*} game_desc 
+ * @param {*} game_player_id 
+ * @param {*} game_id 
+ */
 function updateGameSessionBD(game_sdate, game_desc, game_player_id, game_id) {
     var xhr = new XMLHttpRequest();
     xhr.open("PATCH", "/updateGameSession");
@@ -1029,14 +1086,15 @@ function updateGameSessionBD(game_sdate, game_desc, game_player_id, game_id) {
 }
 
 // StatisticType
-
+/**
+ * Busca as Statistic Types à base de dados, cria as statisticTypes e insere no Array
+ */
 function getStatisticTypeBD() {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/getStatisticTypes", true);
     xhr.onreadystatechange = function () {
         if ((this.readyState === 4) && (this.status === 200)) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response);
             response.forEach(function (j) {
                 var statisticType = new StatisticType(j.statType_Name, j.statType_Desc, j.statType_ID);
                 if (arrayStatsTypes.lenght != 0) {
@@ -1045,7 +1103,7 @@ function getStatisticTypeBD() {
                     }
                 } else
                     arrayStatsTypes.push(statisticType);
-            })       
+            })
         }
     }
     xhr.send();
@@ -1053,14 +1111,15 @@ function getStatisticTypeBD() {
 
 
 //Statistic
-
+/**
+ * Busca as statitics à base de dados, cria os statistics e insere no Array
+ */
 function getStatisticBD() {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/getStatistics", true);
     xhr.onreadystatechange = function () {
         if ((this.readyState === 4) && (this.status === 200)) {
             var response = JSON.parse(xhr.responseText);
-            console.log(response);
             response.forEach(function (j) {
                 var statisticType = searchStatisticTypeByID(j.stat_StatType_ID);
                 var statistic = new Statistic(j.stat_Value, statisticType, j.stat_Game_ID, j.stat_ID);
@@ -1070,7 +1129,7 @@ function getStatisticBD() {
                     }
                 } else
                     arrayStats.push(statistic);
-            })       
+            })
         }
     }
     xhr.send();
