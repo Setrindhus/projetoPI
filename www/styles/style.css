@@ -179,3 +179,9 @@ button:hover{
     padding-top: 3px;
     padding-bottom: 3px;
 }
+
+@media only screen and (max-width: 600px) {
+    #menu { 
+        margin-left: 5%;
+    }
+}
