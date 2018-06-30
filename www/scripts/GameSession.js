@@ -1,7 +1,12 @@
-//var games_id_count = 1;
+/*var games_id_count = 1;
 
-/*function GameSession(sDate, desc, player){
+function GameSession(sDate, desc, player, game_id){
+    if(game_id === undefined){
     this.game_id = games_id_count++;
+    }else{
+        this.game_id = game_id;
+        games_id_count++;
+    }
     this.game_sDate = sDate;
     this.game_desc = desc;
     this.game_player = player;

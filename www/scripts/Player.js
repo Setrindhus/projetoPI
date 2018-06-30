@@ -1,7 +1,12 @@
-//var player_id_count = 1;
+/*var player_id_count = 1;
 
-/*function Player (name, bday, country){
+function Player (name, bday, country, player_id){
+    if(player_id===undefined){
     this.player_id = player_id_count++;
+    }else{
+        this.player_id = player_id;
+        player_id_count++;
+    }
     this.player_name = name;
     this.player_bday = bday;
     this.player_country = country;
