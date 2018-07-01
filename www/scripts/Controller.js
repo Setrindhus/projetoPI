@@ -62,7 +62,7 @@ var active_tab = "home";
 /* Visuais */
 
 /**
- * Escurece o fundo do separador ativo
+ * Muda a cor da letra do separador ativo
  */
 function highlightSelectedTab() {
     eraseTabsHighlights();
@@ -82,6 +82,9 @@ function highlightSelectedTab() {
     }
 }
 
+/**
+ * Faz o reset das cores da barra de navegação
+ */
 function eraseTabsHighlights() {
     for (let i = 0; i < document.getElementById("menu").children.length; i++) {
         let li = document.getElementById("menu").children[i];
@@ -89,6 +92,10 @@ function eraseTabsHighlights() {
     }
 }
 
+/**
+ * Muda a cor de background da linha da tabela
+ * @param {HTMLTableRowElement} tr 
+ */
 function highlightSelectedTableRow(tr) {
     if (active_tab === "gameSessions") {
         tr.style.backgroundColor = 'rgb(36, 36, 144)';
@@ -98,6 +105,9 @@ function highlightSelectedTableRow(tr) {
     tr.style.color = "white";
 }
 
+/**
+ * Faz o reset das cores das linhas das tabelas
+ */
 function eraseTablesHighlights() {
     var tables = document.getElementsByTagName("table");
     for (let i = 0; i < tables.length; i++) {
@@ -694,6 +704,10 @@ function clearPlayerListOptions() {
 
 // ************************STATISTICS************************
 
+/**
+ * Abre o separador que mostra o grafico com as estatisticas do jogador seleccionado
+ * @param {Integer} id id do jogador
+ */
 function selectPlayerStats(id) {
     let player = void 0;
     for (let i = 0; i < arrayPlayers.length; i++) {
@@ -706,6 +720,11 @@ function selectPlayerStats(id) {
     playerColumnGraph(playerTotalStats(id), player);
 }
 
+/**
+ * Cria um gráfico com as estatisticas do jogador seleccionado
+ * @param {Array} array array com as estatisticas do jogador 
+ * @param {Player} player jogador seleccionado
+ */
 function playerColumnGraph(array, player) {
     document.getElementById("stats").firstElementChild.firstElementChild.textContent = player.player_name.toUpperCase() + " STATS";
 
@@ -873,6 +892,10 @@ function tableHeader(array) {
     return thr;
 }
 
+/**
+ * verifica se o jogador existe
+ * @param {Player} player 
+ */
 function playerExists(player) {
     for (var i = 0; i < arrayPlayers.length; i++) {
         if (arrayPlayers[i].player_id === player.player_id)
@@ -881,6 +904,10 @@ function playerExists(player) {
     return false;
 }
 
+/**
+ * Verifica se a gameSession existe
+ * @param {GameSession} game 
+ */
 function sessionExists(game) {
     for (let i = 0; i < arrayGames.length; i++) {
         if (arrayGames[i].game_id === game.game_id)
@@ -889,6 +916,10 @@ function sessionExists(game) {
     return false;
 }
 
+/**
+ * Verifica se o tipo de estatistica existe
+ * @param {StatisticType} statType 
+ */
 function statTypeExists(statType) {
     for (let i = 0; i < arrayStatsTypes.length; i++) {
         if (arrayStatsTypes[i].statType_id === statType.statType_id)
@@ -897,6 +928,10 @@ function statTypeExists(statType) {
     return false;
 }
 
+/**
+ * Verifica se a estatistica existe
+ * @param {Statistic} stats 
+ */
 function statsExists(stats) {
     for (let i = 0; i < arrayStats.length; i++) {
         if (arrayStats[i].stat_id === stats.stat_id)
@@ -905,6 +940,10 @@ function statsExists(stats) {
     return false;
 }
 
+/**
+ * Retorna o jogador cujo id corresponde ao id passado como argumento
+ * @param {Integer} id 
+ */
 function searchPlayerByID(id) {
     for (let i = 0; i < arrayPlayers.length; i++) {
         if (id == arrayPlayers[i].player_id) {
@@ -913,7 +952,10 @@ function searchPlayerByID(id) {
     }
 }
 
-
+/**
+ * Retorna o tipo de estatistica cujo id corresponde ao id passado como argumento
+ * @param {Integer} id 
+ */
 function searchStatisticTypeByID(id) {
     for (let i = 0; i < arrayStatsTypes.length; i++) {
         if (id == arrayStatsTypes[i].statType_id) {
